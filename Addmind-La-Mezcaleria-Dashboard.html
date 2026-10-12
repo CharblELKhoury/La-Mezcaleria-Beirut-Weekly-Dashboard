@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>La Mezcaleria — Ad Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Calibri:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f4f2;--white:#fff;--border:#ddddd8;--borderl:#e9e9e5;
+  --text:#111;--t2:#464642;--t3:#8a8a84;
+  --green:#166f40;--gbg:#eaf5f0;--red:#b02e24;--rbg:#fdf0ef;
+  --amber:#8a5c00;--abg:#fef8e7;--blue:#1557a0;--bbg:#e8f4ff;
+  --sw:214px;--hh:58px;--r:8px;
+}
+html,body{height:100%;font-family:'Calibri',Calibri,Candara,Geneva,Tahoma,sans-serif;font-size:13.5px;color:var(--text);background:var(--bg);}
+.app{display:flex;height:100vh;overflow:hidden;}
+/* Sidebar */
+.sb{width:var(--sw);background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid var(--border);}
+.sb-logo .n{font-size:14px;font-weight:700;letter-spacing:.3px;}
+.sb-logo .s{font-size:9px;color:var(--t3);margin-top:3px;letter-spacing:.7px;text-transform:uppercase;}
+.sb-sec{padding:14px 16px 5px;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);}
+.sb-it{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;font-size:13px;color:var(--t2);border-left:2.5px solid transparent;transition:all .12s;user-select:none;}
+.sb-it:hover{background:#f6f6f4;color:var(--text);}
+.sb-it.on{color:var(--text);font-weight:600;border-left-color:var(--text);background:#efeeeb;}
+.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sb-foot{margin-top:auto;padding:14px 16px;border-top:1px solid var(--border);font-size:9.5px;color:var(--t3);line-height:1.8;}
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{height:var(--hh);background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 22px;gap:12px;flex-shrink:0;position:relative;z-index:200;}
+.tb-ttl{font-size:14.5px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* Calendar */
+.cal-wrap{position:relative;flex-shrink:0;}
+.cal-btn{display:flex;align-items:center;gap:8px;padding:6px 13px;background:var(--white);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-family:inherit;font-size:12.5px;color:var(--text);user-select:none;white-space:nowrap;min-width:200px;transition:border-color .12s;}
+.cal-btn:hover{border-color:#999;}
+.cal-btn .ci{font-size:13px;}
+.cal-btn .cl{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;}
+.cal-btn .ca{font-size:8px;color:var(--t3);transition:transform .15s;}
+.cal-btn .ca.up{transform:rotate(180deg);}
+.cal-dd{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);box-shadow:0 10px 36px rgba(0,0,0,.13);z-index:400;width:540px;max-width:calc(100vw - 24px);max-height:calc(100vh - 90px);overflow:hidden;flex-direction:column;}
+.qtag{font-weight:600;color:var(--text);}
+.qsub{color:var(--t3);font-size:11px;margin-left:4px;}
+.qas td{background:#f1f0ec;font-weight:700;color:var(--text);text-align:left !important;padding:10px 14px !important;font-size:12.5px;}
+.qwk td{background:var(--text);color:#fff;font-weight:600;text-align:left !important;padding:7px 14px !important;font-size:11.5px;letter-spacing:.4px;}
+.qleg{padding:14px 16px 16px;border-top:1px solid var(--borderl);background:#fafaf8;}
+.qlh{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--t3);margin-bottom:8px;}
+.qlr{display:grid;grid-template-columns:260px 1fr;gap:12px;padding:5px 0;font-size:12px;border-bottom:1px solid var(--borderl);}
+.qlr b{color:var(--text);font-weight:600;}.qlr span{color:var(--t2);}
+.qlp{font-size:12px;line-height:1.55;color:var(--t2);max-width:900px;}
+@media(max-width:700px){.qlr{grid-template-columns:1fr;gap:2px;}}
+.dmh,.dmr{display:grid;grid-template-columns:90px 1fr 56px 64px;gap:10px;align-items:center;}
+.dmh{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);padding:6px 0;border-bottom:1px solid var(--borderl);}
+.dmh span:nth-child(n+3),.dmr .dms,.dmr .dmv{text-align:right;}
+.dmr{padding:8px 0;border-bottom:1px solid var(--borderl);font-size:12.5px;}
+.dml{color:var(--text);font-weight:600;}
+.dmb{position:relative;height:22px;display:flex;align-items:center;}
+.dmb i{display:block;height:100%;border-radius:3px;}
+.dmb b{margin-left:8px;font-weight:600;font-size:12px;color:var(--text);white-space:nowrap;}
+.dms,.dmv{color:var(--t2);}
+.dmsum{font-size:13px;color:var(--t2);margin:2px 0 12px;}.dmsum b{color:var(--text);}
+.qnote{font-size:11.5px;color:var(--t3);padding:9px 14px;border-top:1px solid var(--borderl);background:#fafaf8;}
+.cal-dd.open{display:flex;}
+@media(max-width:700px){.cal-dd{position:fixed;left:12px;right:12px;top:60px;width:auto;max-width:none;}}
+.cal-scroll{overflow-y:auto;flex:1;}
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));padding:14px 12px 6px;}
+.cal-col{padding:4px 10px 10px;}
+.cal-col+.cal-col{border-left:1px solid var(--borderl);}
+.cal-mhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--borderl);}
+.cal-mname{font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text);}
+.cal-mbtn{font-size:9px;padding:2px 7px;border-radius:4px;border:1px solid var(--border);background:var(--bg);color:var(--t2);cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+.cal-mbtn:hover:not(:disabled){background:var(--border);}
+.cal-mbtn.msel{background:var(--text);color:#fff;border-color:var(--text);}
+.cal-mbtn:disabled{opacity:.25;cursor:default;}
+.cal-wbtn{display:block;width:100%;text-align:left;padding:5px 8px;border-radius:5px;border:1px solid transparent;background:transparent;font-family:inherit;font-size:10.5px;color:var(--t2);cursor:pointer;transition:all .12s;margin-bottom:3px;}
+.cal-wbtn:hover:not(:disabled){background:var(--bg);border-color:var(--border);}
+.cal-wbtn.wsel{background:var(--text);color:#fff;}
+.cal-wbtn:disabled{opacity:.22;cursor:default;}
+.cal-bar{border-top:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;background:#fafaf8;flex-shrink:0;}
+.cal-sum{font-size:12px;color:var(--t2);font-weight:500;}
+.cal-clr{font-size:11.5px;color:var(--t3);cursor:pointer;border:none;background:none;font-family:inherit;padding:4px 8px;border-radius:4px;}
+.cal-clr:hover{background:var(--bg);}
+/* Tabs */
+.tabs{display:flex;gap:1px;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:2px;flex-shrink:0;}
+.tab{padding:5px 13px;border-radius:4px;font-size:11.5px;cursor:pointer;color:var(--t2);white-space:nowrap;transition:all .12s;}
+.tab.on{background:var(--white);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.content{flex:1;overflow-y:auto;padding:22px 26px;}
+/* KPIs */
+.kg{display:grid;gap:13px;margin-bottom:18px;}
+.kc{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;}
+.kl{font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:8px;}
+.kv{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.6px;}
+.kv.na{color:var(--t3);font-size:20px;}
+.ks{font-size:11px;color:var(--t3);margin-top:5px;}
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:7px;}
+.chip.up{background:var(--gbg);color:var(--green);}
+.chip.dn{background:var(--rbg);color:var(--red);}
+.chip.neu{background:#f0f0ec;color:var(--t3);}
+/* Layout */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.sec{display:flex;align-items:center;justify-content:space-between;margin:22px 0 11px;}
+.sec h2{font-size:9px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--t3);}
+.secn{font-size:11px;color:var(--t3);}
+.panel{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;}
+.pttl{font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:14px;}
+/* Bars */
+.bars{display:flex;flex-direction:column;gap:9px;}
+.brow{display:flex;align-items:center;gap:10px;}
+.blbl{width:108px;font-size:12px;color:var(--t2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+.btrack{flex:1;height:18px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.bfill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.bnum{width:76px;font-size:12px;font-weight:600;text-align:right;flex-shrink:0;white-space:nowrap;}
+/* Tables */
+.dt{width:100%;border-collapse:collapse;font-size:13px;}
+.dt thead th{font-size:8.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--t3);padding:9px 11px;border-bottom:1.5px solid var(--border);text-align:right;white-space:nowrap;}
+.dt thead th:first-child{text-align:left;}
+.dt thead th.thc{width:38px;padding:9px 6px;}
+.dt thead th.tha{width:150px;padding:9px 8px;text-align:left;}
+.dt tbody td{padding:9px 11px;border-bottom:1px solid var(--borderl);text-align:right;white-space:nowrap;}
+.dt tbody td:first-child{text-align:left;}
+.dt tbody tr:last-child td{border-bottom:none;}
+.dt tbody tr:hover td{background:#f8f8f6;}
+.dt tfoot td{padding:10px 11px;border-top:2px solid var(--border);font-weight:700;text-align:right;background:#f6f6f4;white-space:nowrap;}
+.dt tfoot td:first-child{text-align:left;}
+.vc{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.vdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.tup{color:var(--green);font-weight:600;}
+.tdn{color:var(--red);font-weight:600;}
+.tna{color:var(--t3);}
+/* Toggle */
+.tog{display:inline-flex;align-items:center;justify-content:center;width:26px;height:22px;border-radius:5px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:9px;color:var(--t3);transition:all .12s;user-select:none;vertical-align:middle;}
+.tog:hover{background:var(--border);}
+.tog.open{background:var(--text);color:#fff;border-color:var(--text);}
+/* Ad-set rows */
+.ads-row td{font-size:12px;color:var(--t2);padding:7px 11px 7px 28px !important;background:#fafafa;border-bottom:1px solid var(--borderl);}
+.ads-row td:not(:first-child){text-align:right;}
+.ads-row td:first-child::before{content:"↳ ";color:var(--t3);}
+/* Analysis tags */
+.anote{font-size:12px;color:var(--t2);line-height:1.5;}
+/* Monthly spend blocks */
+.spend-month-block{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:18px;}
+.spend-month-hd{padding:13px 18px;background:#f8f8f6;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.spend-month-name{font-size:12.5px;font-weight:700;}
+.spend-month-total{font-size:13px;font-weight:700;}
+.svr{display:flex;align-items:center;padding:10px 18px;border-bottom:1px solid var(--borderl);gap:12px;}
+.svr:last-child{border-bottom:none;}
+.svr:hover{background:#fafafa;}
+.svr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.svr-name{width:118px;font-size:13px;font-weight:600;flex-shrink:0;}
+.svr-bwrap{flex:1;height:16px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.svr-bar{height:100%;border-radius:3px;}
+.svr-amt{width:78px;font-size:13px;font-weight:600;text-align:right;flex-shrink:0;}
+.svr-tog{width:34px;flex-shrink:0;text-align:right;}
+.svr-tog button{font-size:9.5px;color:var(--t3);border:1px solid var(--border);background:var(--bg);border-radius:4px;padding:2px 6px;cursor:pointer;font-family:inherit;transition:all .12s;}
+.svr-tog button.open{background:var(--text);color:#fff;border-color:var(--text);}
+.swr-wrap{background:#fafafa;border-bottom:1px solid var(--borderl);}
+.swr{display:flex;align-items:baseline;padding:6px 18px 6px 38px;gap:12px;border-bottom:1px solid var(--borderl);}
+.swr:last-child{border-bottom:none;}
+.swr-lbl{width:130px;font-size:11px;color:var(--t2);flex-shrink:0;}
+.swr-acts{flex:1;font-size:11px;color:var(--t3);}
+.swr-amt{width:78px;font-size:11.5px;font-weight:600;text-align:right;color:var(--t2);}
+/* MoM */
+.momgrid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--white);margin-bottom:18px;}
+.momcell{padding:18px 20px;}
+.momcell+.momcell{border-left:1px solid var(--border);}
+.momlbl{font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:10px;}
+.momval{font-size:24px;font-weight:700;line-height:1;letter-spacing:-.5px;}
+.momprv{font-size:11px;color:var(--t3);margin-top:4px;}
+.momchip{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:8px;}
+.momchip.up{background:var(--gbg);color:var(--green);}
+.momchip.dn{background:var(--rbg);color:var(--red);}
+.momchip.neu{background:#f0f0ec;color:var(--t3);}
+/* Funnel */
+.funnel{display:flex;flex-direction:column;gap:7px;}
+.fnrow{display:flex;align-items:center;gap:10px;}
+.fnlbl{width:90px;font-size:12px;color:var(--t2);text-align:right;flex-shrink:0;}
+.fnbar{border-radius:4px;height:30px;display:flex;align-items:center;padding:0 13px;font-size:12.5px;font-weight:600;color:white;min-width:56px;}
+.fnval{width:66px;font-size:12.5px;font-weight:600;text-align:right;flex-shrink:0;}
+/* Branch header */
+.bhd{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.bicon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0;}
+.bname{font-size:22px;font-weight:700;}
+.bpill{font-size:11px;color:var(--t2);background:var(--bg);border:1px solid var(--border);padding:3px 10px;border-radius:10px;}
+.ndpill{font-size:11px;color:var(--t3);background:#f0f0ec;border:1px solid var(--border);padding:3px 10px;border-radius:10px;}
+/* Monthly bars */
+.mwrap{display:flex;align-items:flex-end;gap:14px;padding-top:4px;}
+.mcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
+.mbar{width:100%;border-radius:4px 4px 0 0;}
+.mval{font-size:12px;font-weight:600;white-space:nowrap;text-align:center;}
+.mlbl{font-size:10.5px;color:var(--t3);white-space:nowrap;text-align:center;}
+/* Misc */
+.infobox{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:13px 17px;margin-bottom:14px;font-size:12.5px;color:var(--t2);line-height:1.7;}
+.nodata{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:40px 24px;text-align:center;color:var(--t3);font-size:13.5px;}
+.footer{font-size:10px;color:var(--t3);margin-top:24px;padding-top:14px;border-top:1px solid var(--borderl);display:flex;gap:20px;flex-wrap:wrap;}
+.tabs{display:none !important;}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sb">
+  <div class="sb-logo"><div class="n">ADDMIND BEIRUT</div><div class="s">Ad Performance Report</div></div>
+  <div class="sb-sec">Venue</div>
+  <div class="sb-it on" onclick="nav('mez',this)"><span class="sb-dot" style="background:#cb4335;"></span>La Mezcaleria</div>
+  <div class="sb-it" onclick="qnav('mez',this)"><span class="sb-dot" style="background:#999;"></span>Ads Quality</div>
+  <div class="sb-it" onclick="dnav('mez',this)"><span class="sb-dot" style="background:#999;"></span>Demographics</div>
+  <div class="sb-it" onclick="anav('mez',this)"><span class="sb-dot" style="background:#999;"></span>Account Insights</div>
+  <div class="sb-foot">Addmind Beirut · Meta Ads<br/>Updated: 11 Oct 2026</div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <div class="tb-ttl" id="tbt">La Mezcaleria — Performance</div>
+    <div class="cal-wrap" id="cW">
+      <div class="cal-btn" id="cB"><span class="ci">📅</span><span class="cl" id="cL">23 – 31 Mar 2026</span><span class="ca" id="cA">▼</span></div>
+      <div class="cal-dd" id="cD">
+        <div class="cal-scroll"><div class="cal-grid" id="cG"></div></div>
+        <div class="cal-bar"><button class="cal-clr" onclick="calReset()">Reset</button><span class="cal-sum" id="cS">1 week selected</span></div>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab on" onclick="setTab('perf',this)">Performance</div>
+      <div class="tab" onclick="setTab('spend',this)">Monthly Spend</div>
+      <div class="tab" onclick="setTab('mom',this)">MoM</div>
+      <div class="tab" onclick="setTab('hist',this)">All Weeks</div>
+    </div>
+  </div>
+  <div class="content" id="cnt"></div>
+</div>
+</div>
+<script>
+const V=[{"id":"mez","name":"La Mezcaleria","c":"#cb4335"}];
+
+const WK=[{"id":"w20261005","label":"05 – 11 Oct 2026","mk":"oct","v":{"mez":{"r":121,"re":51958,"im":101188,"cl":685,"sp":411.12,"rt":"Conv. Started","ads":[{"n":"Wed – Ladies Night – Oct 2026 (general)","r":31,"re":8609,"im":16849,"cl":223,"sp":71.11,"note":"Best Mez result this week. Highest conv. and click volume of the set."},{"n":"Generic – Oct 2026 (general)","r":25,"re":8420,"im":19081,"cl":110,"sp":69.09,"note":"New Generic ad set launched this week with strong opening results."},{"n":"Sun – Mehiko – Oct 2026 (general)","r":19,"re":7874,"im":16473,"cl":132,"sp":73.05,"note":"Consistent Sunday activation."},{"n":"Mez Night – Oct 2026 (general)","r":18,"re":6067,"im":10054,"cl":44,"sp":52.7,"note":"Lowest Mez spend this week, steady conv. rate."},{"n":"Tuesdays – Oct 2026 (general)","r":17,"re":13466,"im":22225,"cl":71,"sp":73.17,"note":"Highest Mez spend, reach and impression volume this week."},{"n":"Thursdays Offer – Oct 2026 (general)","r":11,"re":7522,"im":16506,"cl":105,"sp":72,"note":"Lower conv. volume relative to spend this week."}],"qa":[{"n":"Ghost - 06 Oct 2026","s":"Wed – Ladies Night – Oct 2026 (general)","q":"Average","im":16342,"r":30},{"n":"Ghost - 01 June 2026","s":"Wed – Ladies Night – Oct 2026 (general)","q":"-","im":288,"r":1},{"n":"Ghost - 03 July 2026","s":"Wed – Ladies Night – Oct 2026 (general)","q":"-","im":219,"r":0},{"n":"Ghost - 06 Oct 2026","s":"Generic – Oct 2026 (general)","q":"Below average – bottom 35% of ads","im":19081,"r":25},{"n":"Ghost - 03 July 2026","s":"Sun – Mehiko – Oct 2026 (general)","q":"Average","im":15960,"r":19},{"n":"Ghost - 01 June 2026","s":"Sun – Mehiko – Oct 2026 (general)","q":"-","im":513,"r":0},{"n":"Reel - 24 Sept 2026","s":"Mez Night – Oct 2026 (general)","q":"Below average – bottom 20% of ads","im":10054,"r":18},{"n":"Ghost - 03 July 2026","s":"Tuesdays – Oct 2026 (general)","q":"-","im":21560,"r":15},{"n":"Static - 06 Oct 2026","s":"Tuesdays – Oct 2026 (general)","q":"-","im":665,"r":2},{"n":"Ghost - 06 Oct 2026","s":"Thursdays Offer – Oct 2026 (general)","q":"Average","im":13323,"r":5},{"n":"Ghost - 03 July 2026","s":"Thursdays Offer – Oct 2026 (general)","q":"Below average – bottom 20% of ads","im":3183,"r":6}],"dm":{"age":[{"g":"18–24","re":8340,"im":28400},{"g":"25–34","re":14400,"im":44900},{"g":"35–44","re":5490,"im":17800},{"g":"45–54","re":2500,"im":6930},{"g":"55–64","re":852,"im":2110},{"g":"65+","re":459,"im":1070}],"gen":[{"g":"Female","re":19800,"im":66600},{"g":"Male","re":11800,"im":34000},{"g":"Uncategorised","re":190,"im":590}]},"ai":{"views":"109.2K","ig":"108,883","fb":"327","ci":"679","pv":"2.5K","fo":"131"}}}},{"id":"w20261001","label":"01 – 04 Oct 2026","mk":"oct","v":{"mez":{"r":35,"re":25603,"im":43473,"cl":176,"sp":152.76,"rt":"Conv. Started","ads":[{"n":"Thursdays Offer – Oct 2026 (general)","r":10,"re":6737,"im":12325,"cl":31,"sp":35,"note":"Best Mez result this week. Highest conv. volume of the set."},{"n":"Sun – Mehiko – Oct 2026 (general)","r":9,"re":4783,"im":9019,"cl":63,"sp":33.57,"note":"Highest Mez click volume this week."},{"n":"Tuesdays – Oct 2026 (general)","r":8,"re":6561,"im":10803,"cl":32,"sp":35.36,"note":"Consistent Tuesday activation."},{"n":"Mez Night – Oct 2026 (general)","r":8,"re":3738,"im":5483,"cl":23,"sp":23.46,"note":"Steady Mez Night performance opening October."},{"n":"Wed – Ladies Night – Oct 2026 (general)","r":0,"re":3784,"im":5843,"cl":27,"sp":25.37,"note":"Minimal spend this week, no recorded conv. results."}]}}},{"id":"w20260928","label":"28 – 30 Sep 2026","mk":"sep","v":{"mez":{"r":36,"re":12069,"im":18768,"cl":95,"sp":95.39,"rt":"Conv. Started","ads":[{"n":"Mez Night – Sep 2026 (general)","r":10,"re":3314,"im":4985,"cl":22,"sp":30.87,"note":"Best Mez result this week. Highest spend and conv. volume of the set."},{"n":"Tuesdays – Sep 2026 (general)","r":9,"re":2036,"im":2894,"cl":19,"sp":15.03,"note":"Consistent Tuesday activation closing September."},{"n":"Thursdays Offer – Sep 2026 (general)","r":9,"re":2868,"im":5026,"cl":15,"sp":19.06,"note":"Steady Thursday Offer performance."},{"n":"Wed – Ladies Night – Sep 2026 (general)","r":6,"re":1288,"im":1628,"cl":14,"sp":11.49,"note":"Lowest spend of the set, steady conv. rate."},{"n":"Sun – Mehiko – Sep 2026 (general)","r":2,"re":2563,"im":4235,"cl":25,"sp":18.94,"note":"Lower conv. volume this week."}]}}},{"id":"w20260921","label":"21 – 27 Sep 2026","mk":"sep","v":{"mez":{"r":119,"re":40853,"im":77829,"cl":365,"sp":375.03,"rt":"Conv. Started","ads":[{"n":"Mez Night – Sep 2026 (general)","r":42,"re":11263,"im":21384,"cl":92,"sp":123.72,"note":"Best Mez result this week. Highest spend and conv. volume of the set."},{"n":"Sun – Mehiko – Sep 2026 (general)","r":22,"re":7822,"im":15714,"cl":106,"sp":67.89,"note":"Highest Mez click volume this week."},{"n":"Wed – Ladies Night – Sep 2026 (general)","r":22,"re":4189,"im":6485,"cl":49,"sp":45.08,"note":"Consistent Ladies Night performance at efficient spend."},{"n":"Tuesdays – Sep 2026 (general)","r":17,"re":8668,"im":15845,"cl":49,"sp":68.74,"note":"Steady Tuesday activation."},{"n":"Thursdays Offer – Sep 2026 (general)","r":16,"re":7724,"im":16661,"cl":60,"sp":65.75,"note":"Consistent Thursday Offer results."},{"n":"Mon – La Happy Hora – Sep 2026 (general)","r":0,"re":1187,"im":1740,"cl":9,"sp":3.85,"note":"Minimal spend this week, no recorded conv. results."}]}}},{"id":"w20260914","label":"14 – 20 Sep 2026","mk":"sep","v":{"mez":{"r":111,"re":38598,"im":89476,"cl":485,"sp":415.38,"rt":"Conv. Started","ads":[{"n":"Mon – La Happy Hora – Sep 2026 (general)","r":8,"re":6075,"im":27631,"cl":152,"sp":97.17,"note":"Highest Mez spend and impression volume this week, lower conv. rate."},{"n":"Wed – Ladies Night – Sep 2026 (general)","r":24,"re":3796,"im":5715,"cl":64,"sp":47.21,"note":"Best Mez result this week. Highest conv. volume of the set."},{"n":"Sun – Mehiko – Sep 2026 (general)","r":21,"re":9914,"im":19065,"cl":132,"sp":76.39,"note":"Highest Mez click volume and reach this week."},{"n":"Thursdays Offer – Sep 2026 (general)","r":21,"re":6918,"im":15775,"cl":50,"sp":76.23,"note":"Joint second-best Mez result this week."},{"n":"Mez Night – Sep 2026 (general)","r":20,"re":5009,"im":9066,"cl":49,"sp":45.37,"note":"New Mez Night concept launched this week with solid opening results."},{"n":"Tuesdays – Sep 2026 (general)","r":17,"re":6886,"im":12224,"cl":38,"sp":73.01,"note":"Consistent Tuesday activation."}]}}},{"id":"w20260907","label":"07 – 13 Sep 2026","mk":"sep","v":{"mez":{"r":100,"re":38722,"im":80841,"cl":354,"sp":381.67,"rt":"Conv. Started","ads":[{"n":"Mon – La Happy Hora – Sep 2026 (general)","r":16,"re":9853,"im":22495,"cl":74,"sp":103.27,"note":"Highest Mez spend this week. La Happy Hora leading reach and impressions."},{"n":"Sun – Mehiko – Sep 2026 (general)","r":28,"re":10247,"im":20853,"cl":104,"sp":73.74,"note":"Best Mez result this week. Highest conv. and click volume of the set."},{"n":"Thursdays Offer – Sep 2026 (general)","r":18,"re":7103,"im":15843,"cl":64,"sp":77.79,"note":"Consistent Thursday Offer performance."},{"n":"Tuesdays – Sep 2026 (general)","r":20,"re":7552,"im":15703,"cl":56,"sp":74.81,"note":"Solid Tuesday activation with steady conv."},{"n":"Wed – Ladies Night – Sep 2026 (general)","r":18,"re":3967,"im":5947,"cl":56,"sp":52.06,"note":"Steady Ladies Night results at the lowest spend of the set."}]}}},{"id":"w20260901","label":"01 – 06 Sep 2026","mk":"sep","v":{"mez":{"r":100,"re":28340,"im":59342,"cl":314,"sp":320.34,"rt":"Conv. Started","ads":[{"n":"Tuesdays – Sep 2026 (general)","r":32,"re":6005,"im":11539,"cl":48,"sp":68.33,"note":"Best Mez result this week. Highest conv. volume of the set."},{"n":"Wed – Ladies Night – Sep 2026 (general)","r":22,"re":3674,"im":5746,"cl":43,"sp":44.09,"note":"Solid Ladies Night performance opening September."},{"n":"Sun – Mehiko – Sep 2026 (general)","r":27,"re":7919,"im":15782,"cl":119,"sp":62.95,"note":"Highest Mez click volume this week."},{"n":"Mon – La Happy Hora – Sep 2026 (general)","r":9,"re":5132,"im":14366,"cl":62,"sp":83.88,"note":"Highest Mez spend this week, lower conv. rate."},{"n":"Thursdays Offer – Sep 2026 (general)","r":10,"re":5610,"im":11909,"cl":42,"sp":61.09,"note":"Steady Thursday Offer performance."}]}}},{"id":"w20260824","label":"24 – 30 Aug 2026","mk":"aug","v":{"mez":{"r":89,"re":28823,"im":58588,"cl":342,"sp":332.01,"rt":"Conv. Started","ads":[{"n":"Tuesdays – Aug 2026 (general)","r":22,"re":5110,"im":8982,"cl":43,"sp":61.72,"note":"Best Mez result this week. Highest conv. volume of the set."},{"n":"Sun – Mehiko – Aug 2026 (general)","r":18,"re":7578,"im":14753,"cl":121,"sp":62.45,"note":"Highest Mez click volume and reach this week."},{"n":"Wed – Ladies Night – Aug 2026 (general)","r":18,"re":2776,"im":4271,"cl":52,"sp":39.98,"note":"Steady Ladies Night performance."},{"n":"Thursdays Offer – Aug 2026 (general)","r":11,"re":5417,"im":11780,"cl":57,"sp":62.84,"note":"Consistent Thursday Offer results."},{"n":"Sunset – Aug 2026 (general)","r":13,"re":4501,"im":7674,"cl":30,"sp":50.38,"note":"Solid Sunset performance week over week."},{"n":"Mon – La Happy Hora – Aug 2026 (general)","r":7,"re":3441,"im":11128,"cl":39,"sp":54.64,"note":"La Happy Hora with high impression volume relative to conv."}]}}},{"id":"w20260817","label":"17 – 23 Aug 2026","mk":"aug","v":{"mez":{"r":129,"re":42618,"im":82184,"cl":422,"sp":403.44,"rt":"Conv. Started","ads":[{"n":"Sun – Mehiko – Aug 2026 (general)","r":30,"re":10847,"im":20688,"cl":135,"sp":74.45,"note":"Best Mez result this week. Highest click volume of the set."},{"n":"Thursdays Offer – Aug 2026 (general)","r":18,"re":8091,"im":15611,"cl":70,"sp":75.95,"note":"Highest Mez spend this week."},{"n":"Sunset – Aug 2026 (general)","r":28,"re":6895,"im":11474,"cl":70,"sp":64.19,"note":"Strong Sunset performance, second-best conv. of the set."},{"n":"Tuesdays – Aug 2026 (general)","r":23,"re":7452,"im":13646,"cl":50,"sp":71.57,"note":"Consistent Tuesday activation."},{"n":"Wed – Ladies Night – Aug 2026 (general)","r":18,"re":4373,"im":6926,"cl":46,"sp":49.99,"note":"Steady Ladies Night performance."},{"n":"Mon – La Happy Hora – Aug 2026 (general)","r":12,"re":4960,"im":13839,"cl":51,"sp":67.29,"note":"La Happy Hora with solid impression volume."}]}}},{"id":"w20260810","label":"10 – 16 Aug 2026","mk":"aug","v":{"mez":{"r":139,"re":41341,"im":84092,"cl":460,"sp":437.9,"rt":"Conv. Started","ads":[{"n":"Tuesdays – Aug 2026 (general)","r":35,"re":7063,"im":13537,"cl":73,"sp":84.44,"note":"Best Mez result this week. Highest conv. and spend of the set."},{"n":"Sun – Mehiko – Aug 2026 (general)","r":30,"re":9598,"im":20001,"cl":133,"sp":79.41,"note":"Highest Mez click volume this week. Strong Sunday activation."},{"n":"Thursdays Offer – Aug 2026 (general)","r":28,"re":8538,"im":18206,"cl":81,"sp":79.66,"note":"Consistent Thursday Offer performance."},{"n":"Mon – La Happy Hora – Aug 2026 (general)","r":8,"re":5419,"im":13564,"cl":51,"sp":74.45,"note":"La Happy Hora with highest impression volume this week."},{"n":"Sunset – Aug 2026 (general)","r":24,"re":6088,"im":11234,"cl":62,"sp":66.93,"note":"Steady Sunset results week over week."},{"n":"Wed – Ladies Night – Aug 2026 (general)","r":14,"re":4635,"im":7550,"cl":60,"sp":53.01,"note":"Ladies Night continuing with consistent performance."}]}}},{"id":"w20260803","label":"03 – 09 Aug 2026","mk":"aug","v":{"mez":{"r":141,"re":38459,"im":77054,"cl":488,"sp":390.91,"rt":"Conv. Started","ads":[{"n":"Sun – Mehiko – Aug 2026 (general)","r":29,"re":8690,"im":18736,"cl":169,"sp":70.67,"note":"Highest Mez click volume this week. Strong Sunday activation."},{"n":"Tuesdays – Aug 2026 (general)","r":31,"re":6477,"im":12030,"cl":61,"sp":72.58,"note":"Second-best Mez result. Tuesday performing consistently."},{"n":"Mon – La Happy Hora – Aug 2026 (general)","r":16,"re":4918,"im":11591,"cl":62,"sp":68.04,"note":"La Happy Hora performing well in second week."},{"n":"Thursdays Offer – Aug 2026 (general)","r":27,"re":8558,"im":16979,"cl":86,"sp":70.55,"note":"Thursdays Offer with strong conv. and reach."},{"n":"Sunset – Aug 2026 (general)","r":19,"re":5429,"im":10400,"cl":53,"sp":59.65,"note":"Consistent Sunset results week over week."},{"n":"Wed – Ladies Night – Aug 2026 (general)","r":19,"re":4387,"im":7318,"cl":57,"sp":49.42,"note":"Ladies Night maintaining steady performance."}]}}},{"id":"w20260801","label":"01 – 02 Aug 2026","mk":"aug","v":{"mez":{"r":8,"re":2055,"im":4013,"cl":14,"sp":18.1,"rt":"Conv. Started","ads":[{"n":"Mon – La Happy Hora – Aug 2026 (general)","r":8,"re":2055,"im":4013,"cl":14,"sp":18.1,"note":"La Happy Hora opening the month on Monday only active ad these 2 days."}]}}},{"id":"w20260727","label":"27 – 31 Jul 2026","mk":"jul","v":{"mez":{"r":61,"re":12424,"im":22871,"cl":130,"sp":121.7,"rt":"Conv. Started","ads":[{"n":"Wed – Ladies Night – Jul 2026 (general)","r":1,"re":1227,"im":1659,"cl":9,"sp":11.47,"note":"Closing spend on Ladies Night for July."},{"n":"Sunset – Jul 2026 (general)","r":19,"re":2665,"im":4608,"cl":24,"sp":27.06,"note":"Solid close to the July Sunset activation."},{"n":"Sun – Mehiko – Jul 2026 (general)","r":6,"re":2958,"im":5065,"cl":35,"sp":22.81,"note":"Final July Mehiko spend."},{"n":"Tuesdays – Jul 2026 (general)","r":35,"re":4885,"im":10541,"cl":58,"sp":55.24,"note":"Best Mez result these days. Tuesdays closing July strongly."},{"n":"Mon – La Happy Hora – Aug 2026 (general)","r":0,"re":689,"im":998,"cl":4,"sp":5.12,"note":"New August La Happy Hora concept launching ahead of month start."}]}}},{"id":"w20260720","label":"20 – 26 Jul 2026","mk":"jul","v":{"mez":{"r":119,"re":29585,"im":60283,"cl":349,"sp":327.36,"rt":"Conv. Started","ads":[{"n":"Wed – Ladies Night – Jul 2026 (general)","r":26,"re":4804,"im":7861,"cl":57,"sp":50.55,"note":"Consistent Ladies Night performance."},{"n":"Sunset – Jul 2026 (general)","r":33,"re":7410,"im":15858,"cl":79,"sp":94.03,"note":"Second-best Mez result this week."},{"n":"Sun – Mehiko – Jul 2026 (general)","r":21,"re":8268,"im":17874,"cl":117,"sp":79.82,"note":"Highest Mez click volume this week."},{"n":"Tuesdays – Jul 2026 (general)","r":39,"re":9103,"im":18690,"cl":96,"sp":102.96,"note":"Best Mez result this week. Highest spend and conv. of the set."}]}}},{"id":"w20260713","label":"13 – 19 Jul 2026","mk":"jul","v":{"mez":{"r":116,"re":47572,"im":90226,"cl":467,"sp":450.83,"rt":"Conv. Started","ads":[{"n":"Wed – Ladies Night – Jul 2026 (general)","r":24,"re":4709,"im":7538,"cl":58,"sp":52.45,"note":"Consistent Ladies Night performance."},{"n":"Thursdays Offer – Jul 2026 (general)","r":17,"re":13195,"im":21959,"cl":89,"sp":109.38,"note":"Highest Mez spend and reach this week."},{"n":"Sunset – Jul 2026 (general)","r":27,"re":8455,"im":17266,"cl":81,"sp":99.8,"note":"Strong Sunset performance, second-best conv. of the set."},{"n":"Sun – Mehiko – Jul 2026 (general)","r":25,"re":11029,"im":21886,"cl":151,"sp":84.91,"note":"Best Mez result this week. Highest click volume of the set."},{"n":"Tuesdays – Jul 2026 (general)","r":23,"re":10184,"im":21577,"cl":88,"sp":104.29,"note":"Solid Tuesday activation with consistent results."}]}}},{"id":"w20260706","label":"06 – 12 Jul 2026","mk":"jul","v":{"mez":{"r":100,"re":39952,"im":85939,"cl":408,"sp":414.67,"rt":"Conv. Started","ads":[{"n":"Wed – Ladies Night – Jul 2026 (general)","r":19,"re":3248,"im":5481,"cl":50,"sp":40.39,"note":"Consistent Ladies Night performance into second week of July."},{"n":"Thursdays Offer – Jul 2026 (general)","r":33,"re":14152,"im":36429,"cl":135,"sp":168.62,"note":"Best Mez result this week. Highest reach, spend and conv. of the set."},{"n":"Sunset – Jul 2026 (general)","r":16,"re":6522,"im":12946,"cl":59,"sp":69.85,"note":"Steady Sunset performance week over week."},{"n":"Sun – Mehiko – Jul 2026 (general)","r":11,"re":9199,"im":17585,"cl":109,"sp":58.25,"note":"Highest Mez click volume this week. Good Sunday reach."},{"n":"Tuesdays – Jul 2026 (general)","r":21,"re":6831,"im":13498,"cl":55,"sp":77.56,"note":"Solid Tuesday activation with the second-best conv. result of the set."}]}}},{"id":"w20260701","label":"01 – 05 Jul 2026","mk":"jul","v":{"mez":{"r":74,"re":37085,"im":72463,"cl":308,"sp":340.01,"rt":"Conv. Started","ads":[{"n":"Wed – Ladies Night – Jul 2026 (general)","r":14,"re":3749,"im":5889,"cl":33,"sp":45.1,"note":"Ladies Night continues into July with steady results."},{"n":"Thursdays Offer – Jul 2026 (general)","r":20,"re":12464,"im":28016,"cl":101,"sp":121.84,"note":"Top Mez result this week. Highest reach and spend of the set."},{"n":"Sunset – Jul 2026 (general)","r":14,"re":5581,"im":11138,"cl":48,"sp":59.16,"note":"Sunset concept carrying into July with consistent performance."},{"n":"Sun – Mehiko – Jul 2026 (general)","r":14,"re":7755,"im":13284,"cl":76,"sp":54.02,"note":"Strong Sunday activation with good reach and click volume."},{"n":"Tuesdays – Jul 2026 (general)","r":12,"re":7536,"im":14136,"cl":50,"sp":59.89,"note":"New Tuesday activation launched for July."}]}}},{"id":"w20260629","label":"29 – 30 Jun 2026","mk":"jun","v":{"mez":{"r":19,"re":23321,"im":31124,"cl":83,"sp":114.3,"rt":"Conv. Started","ads":[{"n":"Sun – Mehiko – Jun 2026 (general)","r":3,"re":2722,"im":3598,"cl":8,"sp":13.94,"note":"Final Sunday Mehiko spend for June."},{"n":"Wed – Ladies Night – Jun 2026 (general)","r":6,"re":2614,"im":2833,"cl":16,"sp":20.07,"note":"Closing spend on Ladies Night for June."},{"n":"Sunset – Jun 2026 (general)","r":5,"re":5275,"im":7202,"cl":12,"sp":27.55,"note":"End-of-month Sunset spend."},{"n":"Thursdays Offer – Jun 2026 (general)","r":5,"re":12710,"im":17491,"cl":47,"sp":52.74,"note":"Highest Mez spend these 2 days. Good reach to close June."}]}}},{"id":"w20260622","label":"22 – 28 Jun 2026","mk":"jun","v":{"mez":{"r":102,"re":37560,"im":81079,"cl":304,"sp":418.87,"rt":"Conv. Started","ads":[{"n":"Sun – Mehiko – Jun 2026 (general)","r":12,"re":6495,"im":14279,"cl":41,"sp":77.78,"note":"Continued steady performance, in line with prior weeks."},{"n":"Wed – Ladies Night – Jun 2026 (general)","r":37,"re":8424,"im":13964,"cl":82,"sp":103.56,"note":"Best Mez result this week, strongest conversation volume of the set."},{"n":"Sunset – Jun 2026 (general)","r":27,"re":10166,"im":21584,"cl":74,"sp":104.13,"note":"Highest reach of the Mez set, solid conversion rate."},{"n":"Thursdays Offer – Jun 2026 (general)","r":26,"re":12475,"im":31252,"cl":107,"sp":133.4,"note":"Highest spend and reach of the Mez set this week."}]}}},{"id":"w20260615","label":"15 – 21 Jun 2026","mk":"jun","v":{"mez":{"r":86,"re":37511,"im":85615,"cl":362,"sp":380.46,"rt":"Conv. Started","ads":[{"n":"Sun – Mehiko – Jun 2026 (general)","r":4,"re":7277,"im":16595,"cl":62,"sp":77.04,"note":"Lowest conv. of the Mez set this week despite solid reach."},{"n":"Wed – Ladies Night – Jun 2026 (general)","r":28,"re":8509,"im":16036,"cl":94,"sp":97.55,"note":"Strong Ladies Night conv. continuing. Efficient spend-to-result ratio"},{"n":"Sunset – Jun 2026 (general)","r":31,"re":10926,"im":23651,"cl":97,"sp":92.61,"note":"Top Mez result this week. Sunset concept remains the strongest performer"},{"n":"Thursdays Offer – Jun 2026 (general)","r":23,"re":10799,"im":29333,"cl":109,"sp":113.26,"note":"New Thursday offer launched with solid first-week conv. Good reach at moderate spend."}]}}},{"id":"w20260608","label":"08 – 14 Jun 2026","mk":"jun","v":{"mez":{"r":54,"re":22148,"im":48036,"cl":169,"sp":196.45,"rt":"Conv. Started","ads":[{"n":"Sun – Mehiko – Jun 2026","r":14,"re":6237,"im":14871,"cl":40,"sp":65.86,"note":"Consistent Sunday Mehiko performance continuing into June. Steady audience"},{"n":"Wed – Ladies Night – Jun 2026","r":13,"re":7964,"im":15706,"cl":65,"sp":66.61,"note":"Ladies Night holding strong into new month. Active audience with high click volume."},{"n":"Sunset – Jun 2026","r":27,"re":7947,"im":17459,"cl":64,"sp":63.98,"note":"Top Mez result this week. Sunset concept driving highest conv."}]}}},{"id":"w20260601","label":"01 – 07 Jun 2026","mk":"jun","v":{"mez":{"r":68,"re":20220,"im":41652,"cl":177,"sp":149.9,"rt":"Conv. Started","ads":[{"n":"Sun – Mehiko – Jun 2026","r":12,"re":5300,"im":11959,"cl":40,"sp":50.34,"note":"Mehiko Sunday continues strong from May. Clean week-one carry-over performance."},{"n":"Wed – Ladies Night – Jun 2026","r":22,"re":7272,"im":14159,"cl":59,"sp":50.53,"note":"Best Mez result this week. Ladies Night immediately active in June"},{"n":"Sunset – Jun 2026","r":34,"re":7648,"im":15534,"cl":78,"sp":49.03,"note":"Highest conv. for Mez week one. Sunset concept delivering efficiently from day one"}]}}},{"id":"w20260525","label":"25 – 31 May 2026","mk":"may","v":{"mez":{"r":73,"re":21477,"im":53174,"cl":221,"sp":242.81,"rt":"Conv. Started","ads":[{"n":"Thurs – Ladies Night","r":16,"re":5667,"im":10523,"cl":46,"sp":47.59,"note":"Steady Ladies Night results week-over-week. Consistent Thursday audience"},{"n":"Mez Night","r":32,"re":3475,"im":13774,"cl":77,"sp":75.57,"note":"Best Mez Night result in May. Retargeting pool active"},{"n":"Sun – Mehiko","r":25,"re":12335,"im":28877,"cl":98,"sp":119.65,"note":"Highest reach and strong results for Sun Mehiko. Broad audience converting well"}]}}},{"id":"w20260518","label":"18 – 24 May 2026","mk":"may","v":{"mez":{"r":75,"re":22737,"im":56304,"cl":208,"sp":268.39,"rt":"Conv. Started","ads":[{"n":"Generic","r":9,"re":2603,"im":3478,"cl":12,"sp":16.8,"note":"Low results vs spend for generic campaign."},{"n":"Thurs – Ladies Night","r":29,"re":11289,"im":27309,"cl":95,"sp":113.12,"note":"Highest Ladies Night result in May. Strong event audience"},{"n":"Mez Night","r":24,"re":4383,"im":16853,"cl":72,"sp":89.48,"note":"Retargeting delivering solid results at stable spend"},{"n":"Sun – Mehiko","r":13,"re":4462,"im":8664,"cl":29,"sp":48.99,"note":"Consistent Sunday activation results. Steady audience"}]}}},{"id":"w20260511","label":"11 – 17 May 2026","mk":"may","v":{"mez":{"r":66,"re":19606,"im":39781,"cl":136,"sp":187.48,"rt":"Conv. Started","ads":[{"n":"Generic","r":33,"re":7973,"im":17381,"cl":63,"sp":82.49,"note":"Broad campaign delivering steady conversions. Efficient cost per result."},{"n":"Thurs – Ladies Night","r":13,"re":5264,"im":9014,"cl":25,"sp":39.19,"note":"Consistent Ladies Night results. Thursday audience well-targeted"},{"n":"Mez Night","r":14,"re":2736,"im":7294,"cl":31,"sp":34.92,"note":"Retargeting performing well. High frequency-to-result"},{"n":"Sun – Mehiko","r":6,"re":3633,"im":6092,"cl":17,"sp":30.88,"note":"Lower results vs other Mez ads. Review creative and audience overlap."}]}}},{"id":"w20260504","label":"04 – 10 May 2026","mk":"may","v":{"mez":{"r":31,"re":4762,"im":10742,"cl":58,"sp":50.64,"rt":"Conv. Started","ads":[{"n":"Generic","r":31,"re":4762,"im":10742,"cl":58,"sp":50.64,"note":"Solid first week results. Mezcaleria generic campaign engaging well with existing audience."}]}}},{"id":"w20260501","label":"01 – 03 May 2026","mk":"may","v":{"mez":{"r":0,"re":0,"im":0,"cl":0,"sp":0,"rt":"Conv. Started","ads":[]}}},{"id":"w20260427","label":"27 – 30 Apr 2026","mk":"apr","v":{"mez":{"r":31,"re":9429,"im":17382,"cl":58,"sp":100.47,"rt":"Conv. Started","ads":[{"n":"Thurs – Ladies Night","r":10,"re":4327,"im":7668,"cl":24,"sp":40.45,"note":"New Ladies Night activation performing well. Consistent Thursday audience engagement."},{"n":"Mez Night","r":8,"re":1249,"im":2781,"cl":13,"sp":18.11,"note":"Retargeting holding results at lower spend. Efficient cost per message in short window."},{"n":"Sun – Mehiko","r":13,"re":3853,"im":6933,"cl":21,"sp":41.91,"note":"Sunday activation showing steady results. Good conversion rate for weekend audience."}]}}},{"id":"w20260420","label":"20 – 26 Apr 2026","mk":"apr","v":{"mez":{"r":46,"re":16749,"im":36593,"cl":135,"sp":176.81,"rt":"Conv. Started","ads":[{"n":"Thurs – Ladies Night","r":23,"re":7410,"im":14937,"cl":58,"sp":72.39,"note":"New Ladies Night ad performing strongly in first full week. Best result in Mez this period"},{"n":"Mez Night","r":10,"re":2646,"im":8728,"cl":45,"sp":46.43,"note":"Retargeting pool delivering steady results. Efficient cost per message"},{"n":"Sun – Mehiko","r":13,"re":6693,"im":12928,"cl":32,"sp":57.99,"note":"Good impressions but lower conv. vs spend. Review creative and audience overlap with other Mez ads."}]}}},{"id":"w20260413","label":"13 – 19 Apr 2026","mk":"apr","v":{"mez":{"r":27,"re":6655,"im":19746,"cl":68,"sp":102.75,"rt":"Conv. Started","ads":[{"n":"Thurs – Messriya","r":18,"re":4686,"im":9652,"cl":35,"sp":51.34,"note":"Consistent weekly performer. Good conv. rate for Thursday night event"},{"n":"Mez Night","r":9,"re":1969,"im":10094,"cl":33,"sp":51.41,"note":"Retargeting pool delivering steady results. Efficient cost per message"}]}}},{"id":"w20260406","label":"06 – 12 Apr 2026","mk":"apr","v":{"mez":{"r":17,"re":12471,"im":26609,"cl":61,"sp":69.06,"rt":"Conv. Started","ads":[{"n":"Thurs – Messriya","r":8,"re":9881,"im":16145,"cl":29,"sp":35.17,"note":"First week of April for Messriya. Solid start"},{"n":"Mez Night","r":9,"re":2590,"im":10464,"cl":32,"sp":33.89,"note":"Efficient retargeting. High impressions relative to reach signals strong frequency"}]}}},{"id":"w20260401","label":"01 – 05 Apr 2026","mk":"apr","v":{"mez":{"r":0,"re":0,"im":0,"cl":0,"sp":0,"rt":"Conv. Started","ads":[]}}},{"id":"w3","label":"23 – 31 Mar 2026","mk":"mar","v":{"mez":{"r":34,"re":10835,"im":36302,"cl":102,"sp":144.79,"rt":"Conv. Started","ads":[{"n":"Thurs – Messriya","r":21,"re":8335,"im":21597,"cl":61,"sp":79.42,"note":"Highest result volume this week with strong reach. Audience engagement is high"},{"n":"Mez Night","r":13,"re":2500,"im":14705,"cl":41,"sp":65.37,"note":"Retargeting ad delivering consistent conversions. Efficient cost per result"}]}}},{"id":"w2","label":"16 – 22 Mar 2026","mk":"mar","v":{"mez":{"r":25,"re":10920,"im":33432,"cl":102,"sp":145.67,"rt":"Conv. Started","ads":[{"n":"Thurs – Messriya","r":17,"re":7630,"im":18292,"cl":44,"sp":70.47,"note":"Highest result count this week for Mez. Strong CPR"},{"n":"Mez Night","r":7,"re":2036,"im":13514,"cl":31,"sp":71.39,"note":"Retargeting pool appears small. High impressions vs low reach audience may be fatiguing."},{"n":"Mon – Tapa Vida","r":1,"re":1254,"im":1626,"cl":27,"sp":3.81,"note":"Needs more data before drawing conclusions."}]}}},{"id":"w1","label":"09 – 15 Mar 2026","mk":"mar","v":{"mez":{"r":10,"re":910,"im":11912,"cl":154,"sp":76,"rt":"Conv. Started","ads":[{"n":"Mez Night","r":10,"re":910,"im":11912,"cl":154,"sp":76,"note":"Retargeting ad performing well. Strong CTR despite narrow reach warm audience is converting."}]}}}];
+const DEF="w20261005";
+
+// Full Jan–Mar monthly spend from Overall Spent sheet + weekly uploads
+const MS={"mez":{"name":"La Mezcaleria","c":"#cb4335","months":{"jan":{"t":1350.69,"w":[{"l":"01–04 Jan","a":"Ladies Night, Mondays, Tuesdays, Sundays","s":119},{"l":"05–11 Jan","a":"Ladies Night, Mondays, Tuesdays, Sundays","s":288},{"l":"12–18 Jan","a":"Ladies Night, Mondays, Tuesdays, Sundays","s":323},{"l":"19–25 Jan","a":"Mon–Tapa Vida, Sun–Mekhiko, Wed–Ladies Night, Tue–Lemone, Mez Night","s":390.89},{"l":"26 Jan–01 Feb","a":"Mon–Tapa Vida, Sun–Mehiko, Wed–Ladies Night, Tue–Lemone, Mez Night","s":229.8}]},"feb":{"t":1134,"w":[{"l":"01–08 Feb","a":"Thurs–Messriya, Mez Night, Sun–Mehiko, Mon–Tapa Vida, Tue–Lemone, Wed–Ladies Night","s":567},{"l":"09–15 Feb","a":"Thurs–Messriya, Mez Night, Sun–Mehiko, Mon–Tapa Vida, Tue–Lemone, Wed–Ladies Night","s":285},{"l":"16–22 Feb","a":"Thurs–Messriya, Mez Night, Sun–Mehiko","s":187},{"l":"23–28 Feb","a":"Thurs–Messriya, Mez Night, Sun–Mehiko","s":95}]},"mar":{"t":387.46,"w":[{"l":"01–08 Mar","a":"Mez Night","s":21},{"l":"09–15 Mar","a":"Mez Night","s":76},{"l":"16–22 Mar","a":"Thurs–Messriya, Mez Night, Mon–Tapa Vida","s":145.67},{"l":"23–31 Mar","a":"Thurs–Messriya, Mez Night","s":144.79}]},"apr":{"t":449.09,"w":[{"l":"06–12 Apr","a":"Thurs–Messriya, Mez Night","s":69.06},{"l":"13–19 Apr","a":"Thurs–Messriya, Mez Night","s":102.75},{"l":"20–26 Apr","a":"Thurs–Ladies Night, Mez Night, Sun–Mehiko","s":176.81},{"l":"27–30 Apr","a":"Thurs–Ladies Night, Mez Night, Sun–Mehiko","s":100.47}]},"may":{"t":749.32,"w":[{"l":"04–10 May","a":"Generic","s":50.64},{"l":"11–17 May","a":"Generic, Thurs–Ladies Night, Mez Night, Sun–Mehiko","s":187.48},{"l":"18–24 May","a":"Generic, Thurs–Ladies Night, Mez Night, Sun–Mehiko","s":268.39},{"l":"25–31 May","a":"Thurs–Ladies Night, Mez Night, Sun–Mehiko","s":242.81}]},"jun":{"t":1259.98,"w":[{"l":"01–07 Jun","a":"Sun–Mehiko, Wed–Ladies Night, Sunset","s":149.9},{"l":"08–14 Jun","a":"Sun–Mehiko, Wed–Ladies Night, Sunset","s":196.45},{"l":"15–21 Jun","a":"Sun–Mehiko, Wed–Ladies Night, Sunset, Thursdays Offer","s":380.46},{"l":"22–28 Jun","a":"Sun–Mehiko, Wed–Ladies Night, Sunset, Thursdays Offer","s":418.87},{"l":"29–30 Jun","a":"Sun–Mehiko, Wed–Ladies Night, Sunset, Thursdays Offer","s":114.3}]},"jul":{"t":1649.45,"w":[{"l":"01–05 Jul","a":"Wed–Ladies Night, Thursdays Offer, Sunset, Sun–Mehiko, Tuesdays","s":340.01},{"l":"06–12 Jul","a":"Wed–Ladies Night, Thursdays Offer, Sunset, Sun–Mehiko, Tuesdays","s":414.67},{"l":"13–19 Jul","a":"Wed–Ladies Night, Thursdays Offer, Sunset, Sun–Mehiko, Tuesdays","s":450.83},{"l":"20–26 Jul","a":"Wed–Ladies Night, Sunset, Sun–Mehiko, Tuesdays","s":327.36},{"l":"27–31 Jul","a":"Wed–Ladies Night, Sunset, Sun–Mehiko, Tuesdays","s":116.58}]},"aug":{"t":1587.48,"w":[{"l":"27–31 Jul","a":"Mon – La Happy Hora","s":5.12},{"l":"01–02 Aug","a":"Mon – La Happy Hora","s":18.1},{"l":"03–09 Aug","a":"Sun–Mehiko, Tuesdays, Mon–La Happy Hora, Thursdays Offer, Sunset, Wed–Ladies Night","s":390.91},{"l":"10–16 Aug","a":"Tuesdays, Sun–Mehiko, Thursdays Offer, Mon–La Happy Hora, Sunset, Wed–Ladies Night","s":437.9},{"l":"17–23 Aug","a":"Sun–Mehiko, Thursdays Offer, Sunset, Tuesdays, Wed–Ladies Night, Mon–La Happy Hora","s":403.44},{"l":"24–30 Aug","a":"Tuesdays, Sun–Mehiko, Wed–Ladies Night, Thursdays Offer, Sunset, Mon–La Happy Hora","s":332.01}]},"sep":{"t":1587.81,"w":[{"l":"01–06 Sep","a":"Tuesdays, Wed–Ladies Night, Sun–Mehiko, Mon–La Happy Hora, Thursdays Offer","s":320.34},{"l":"07–13 Sep","a":"Mon–La Happy Hora, Sun–Mehiko, Thursdays Offer, Tuesdays, Wed–Ladies Night","s":381.67},{"l":"14–20 Sep","a":"Mon–La Happy Hora, Wed–Ladies Night, Sun–Mehiko, Thursdays Offer, Mez Night, Tuesdays","s":415.38},{"l":"21–27 Sep","a":"Mez Night, Sun–Mehiko, Wed–Ladies Night, Tuesdays, Thursdays Offer, Mon–La Happy Hora","s":375.03},{"l":"28–30 Sep","a":"Mez Night, Tuesdays, Thursdays Offer, Wed–Ladies Night, Sun–Mehiko","s":95.39}]},"oct":{"t":563.88,"w":[{"l":"01–04 Oct","a":"Thursdays Offer, Sun–Mehiko, Tuesdays, Mez Night, Wed–Ladies Night","s":152.76},{"l":"05–11 Oct","a":"Wed–Ladies Night, Generic, Sun–Mehiko, Mez Night, Tuesdays, Thursdays Offer","s":411.12}]}}}};
+const MNO=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct'];
+// All venues with spend data
+const MS_VENUES=[{"id":"mez","name":"La Mezcaleria","c":"#cb4335"}];
+const MNL={jan:'January 2026',feb:'February 2026',mar:'March 2026',apr:'April 2026',may:'May 2026',jun:'June 2026',jul:'July 2026',aug:'August 2026',sep:'September 2026',oct:'October 2026 (partial)'};
+
+const CAL=[
+  {m:'January',mk:'jan',wks:[{l:'01–04 Jan',id:null},{l:'05–11 Jan',id:null},{l:'12–18 Jan',id:null},{l:'19–25 Jan',id:null},{l:'26 Jan–01 Feb',id:null}]},
+  {m:'February',mk:'feb',wks:[{l:'02–08 Feb',id:null},{l:'09–15 Feb',id:null},{l:'16–22 Feb',id:null},{l:'23–28 Feb',id:null}]},
+  {m:'March',mk:'mar',wks:[{l:'01–08 Mar',id:null},{l:'09–15 Mar',id:'w1'},{l:'16–22 Mar',id:'w2'},{l:'23–31 Mar',id:'w3'}]},
+  {m:'April',mk:'apr',wks:[{l:'01–05 Apr',id:'w20260401'},{l:'06–12 Apr',id:'w20260406'},{l:'13–19 Apr',id:'w20260413'},{l:'20–26 Apr',id:'w20260420'},{l:'27–30 Apr',id:'w20260427'}]},
+  {m:'May',mk:'may',wks:[{l:'01–03 May',id:'w20260501'},{l:'04–10 May',id:'w20260504'},{l:'11–17 May',id:'w20260511'},{l:'18–24 May',id:'w20260518'},{l:'25–31 May',id:'w20260525'}]},
+  {m:'June',mk:'jun',wks:[{l:'01–07 Jun',id:'w20260601'},{l:'08–14 Jun',id:'w20260608'},{l:'15–21 Jun',id:'w20260615'},{l:'22–28 Jun',id:'w20260622'},{l:'29–30 Jun',id:'w20260629'}]},
+  {m:'July',mk:'jul',wks:[{l:'01–05 Jul',id:'w20260701'},{l:'06–12 Jul',id:'w20260706'},{l:'13–19 Jul',id:'w20260713'},{l:'20–26 Jul',id:'w20260720'},{l:'27–31 Jul',id:'w20260727'}]},
+  {m:'August',mk:'aug',wks:[{l:'01–02 Aug',id:'w20260801'},{l:'03–09 Aug',id:'w20260803'},{l:'10–16 Aug',id:'w20260810'},{l:'17–23 Aug',id:'w20260817'},{l:'24–30 Aug',id:'w20260824'}]},
+  {m:'September',mk:'sep',wks:[{l:'01–06 Sep',id:'w20260901'},{l:'07–13 Sep',id:'w20260907'},{l:'14–20 Sep',id:'w20260914'},{l:'21–27 Sep',id:'w20260921'},{l:'28–30 Sep',id:'w20260928'}]},
+  {m:'October',mk:'oct',wks:[{l:'01–04 Oct',id:'w20261001'},{l:'05–11 Oct',id:'w20261005'},{l:'12–18 Oct',id:null},{l:'19–25 Oct',id:null},{l:'26 Oct–01 Nov',id:null}]},
+  {m:'November',mk:null,wks:[{l:'02–08 Nov',id:null},{l:'09–15 Nov',id:null},{l:'16–22 Nov',id:null},{l:'23–29 Nov',id:null}]},
+  {m:'December',mk:null,wks:[{l:'07–13 Dec',id:null},{l:'14–20 Dec',id:null},{l:'21–27 Dec',id:null},{l:'28–31 Dec',id:null}]},
+];
+
+// helpers
+const fN=n=>(!n)?'—':Number(n).toLocaleString('en-US');
+const fK=n=>(!n)?'—':n>=1000?(n/1000).toFixed(1)+'K':String(n);
+const f$=(n,d=0)=>(!n)?'—':'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const f2=n=>(!n)?'—':'$'+Number(n).toFixed(2);
+const pct=(a,b)=>(!b||b===0)?null:((a-b)/b*100);
+function chip(c,p,inv=false){const d=pct(c,p);if(d===null||(!c&&!p))return'<span class="chip neu">—</span>';const pos=inv?d<0:d>0;return`<span class="chip ${pos?'up':'dn'}">${d>0?'▲':'▼'} ${Math.abs(d).toFixed(1)}%</span>`;}
+function tdD(d,inv=false){if(d===null)return'<td class="tna">—</td>';const pos=inv?d<0:d>0;return`<td class="${pos?'tup':'tdn'}">${d>0?'▲':'▼'} ${Math.abs(d).toFixed(1)}%</td>`;}
+function mchip(d,inv=false){if(d===null)return'<span class="momchip neu">—</span>';const pos=inv?d<0:d>0;return`<span class="momchip ${pos?'up':'dn'}">${d>0?'▲':'▼'} ${Math.abs(d).toFixed(1)}%</span>`;}
+function aggW(wids,vid,k){return wids.reduce((a,wid)=>{const w=WK.find(x=>x.id===wid);return a+(w?.v[vid]?.[k]||0);},0);}
+function aggAll(wids,k){return V.reduce((a,v)=>a+aggW(wids,v.id,k),0);}
+function getAds(wids,vid){
+  const map={};
+  wids.forEach(wid=>{const w=WK.find(x=>x.id===wid);(w?.v[vid]?.ads||[]).forEach(a=>{if(!map[a.n])map[a.n]={...a,sp:0,r:0,pv:0,re:0,im:0,cl:0};map[a.n].sp+=a.sp||0;map[a.n].r+=a.r||0;map[a.n].pv+=a.pv||0;map[a.n].re+=a.re||0;map[a.n].im+=a.im||0;map[a.n].cl+=a.cl||0;});});
+  return Object.values(map);
+}
+// State
+let QSIDE=true,QV=false,DV=false,AV=false;
+let VIEW='mez',TAB='perf',SEL=[DEF],SEL_M=null,EXP={},SEX={};
+const sD=(vid,k)=>aggW(SEL,vid,k);
+const sAll=k=>aggAll(SEL,k);
+function sLbl(){
+  if(SEL_M){const mo=CAL.find(x=>x.mk===SEL_M);return mo?mo.m+' 2026':'Month';}
+  if(!SEL.length)return 'No period selected';
+  if(SEL.length===1){const w=WK.find(x=>x.id===SEL[0]);return w?w.label:'—';}
+  return SEL.length+' weeks selected';
+}
+
+// Calendar — only closes via button or outside click
+let calOpen=false;
+document.getElementById('cB').addEventListener('click',e=>{
+  e.stopPropagation();
+  calOpen=!calOpen;
+  document.getElementById('cD').classList.toggle('open',calOpen);
+  if(calOpen){const sel=document.querySelector('#cG .wsel');if(sel){const sc=document.querySelector('.cal-scroll');sc.scrollTop=Math.max(0,sel.offsetTop-sc.clientHeight/2);}}
+  document.getElementById('cA').classList.toggle('up',calOpen);
+});
+document.addEventListener('click',e=>{
+  if(!document.getElementById('cW').contains(e.target)){
+    if(calOpen){calOpen=false;document.getElementById('cD').classList.remove('open');document.getElementById('cA').classList.remove('up');}
+  }
+});
+document.getElementById('cW').addEventListener('click',e=>e.stopPropagation());
+
+function buildCal(){
+  document.getElementById('cG').innerHTML=CAL.map(mo=>{
+    const wD=mo.wks.filter(w=>w.id&&WK.find(x=>x.id===w.id));
+    const canM=mo.mk&&(wD.length>0||V.some(v=>MS[v.id]?.months?.[mo.mk]));
+    const mSel=SEL_M===mo.mk;
+    const mBtn=mo.mk?`<button class="cal-mbtn${mSel?' msel':''}" ${!canM?'disabled':''} onclick="pickM('${mo.mk}')">${mSel?'✓':''} Month</button>`:'';
+    const wBtns=mo.wks.map(wk=>{
+      const has=!!(wk.id&&WK.find(x=>x.id===wk.id));
+      const sel=SEL.includes(wk.id);
+      return`<button class="cal-wbtn${sel?' wsel':''}" ${!has?'disabled':''} ${has?`onclick="pickW('${wk.id}')"`:''}>${wk.l}</button>`;
+    }).join('');
+    return`<div class="cal-col"><div class="cal-mhd"><span class="cal-mname">${mo.m}</span>${mBtn}</div>${wBtns}</div>`;
+  }).join('');
+  const s=document.getElementById('cS');
+  if(SEL_M){const mo=CAL.find(x=>x.mk===SEL_M);s.textContent=(mo?.m||'Month')+' 2026 selected';}
+  else if(SEL.length){s.textContent=SEL.length+' week'+(SEL.length>1?'s':'')+' selected';}
+  else s.textContent='Nothing selected';
+  document.getElementById('cL').textContent=sLbl();
+}
+function pickW(wid){SEL_M=null;const i=SEL.indexOf(wid);if(i>=0)SEL.splice(i,1);else SEL.push(wid);if(!SEL.length)SEL=[DEF];EXP={};buildCal();render();}
+function pickM(mk){if(SEL_M===mk){SEL_M=null;SEL=[DEF];}else{SEL_M=mk;const mo=CAL.find(x=>x.mk===mk);SEL=mo?mo.wks.filter(w=>w.id&&WK.find(x=>x.id===w.id)).map(w=>w.id):[];}EXP={};buildCal();render();}
+function calReset(){SEL_M=null;SEL=[DEF];EXP={};buildCal();render();}
+
+function nav(id,el){VIEW=id;QV=false;DV=false;AV=false;EXP={};document.querySelectorAll('.sb-it').forEach(e=>e.classList.remove('on'));el.classList.add('on');const v=V.find(x=>x.id===id);document.getElementById('tbt').textContent=v?v.name+' — Performance':'All Venues — Overview';render();}
+function qnav(id,el){VIEW=id;QV=true;DV=false;AV=false;EXP={};document.querySelectorAll('.sb-it').forEach(e=>e.classList.remove('on'));el.classList.add('on');const v=V.find(x=>x.id===id);document.getElementById('tbt').textContent=v.name+' — Ads Quality';render();}
+function dnav(id,el){VIEW=id;QV=false;DV=true;AV=false;EXP={};document.querySelectorAll('.sb-it').forEach(e=>e.classList.remove('on'));el.classList.add('on');const v=V.find(x=>x.id===id);document.getElementById('tbt').textContent=v.name+' — Demographics';render();}
+function anav(id,el){VIEW=id;QV=false;DV=false;AV=true;EXP={};document.querySelectorAll('.sb-it').forEach(e=>e.classList.remove('on'));el.classList.add('on');const v=V.find(x=>x.id===id);document.getElementById('tbt').textContent=v.name+' — Account Insights';render();}
+function setTab(t,el){TAB=t;EXP={};document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));el.classList.add('on');render();}
+function togE(vid,e){e.stopPropagation();EXP[vid]=!EXP[vid];render();}
+function togSX(key,e){e.stopPropagation();SEX[key]=!SEX[key];render();}
+
+// PERFORMANCE
+function renderPerf(){
+  if(!SEL.length)return'<div class="nodata">Select a period from the calendar above.</div>';
+  const tS=sAll('sp'),tR=sAll('re'),tI=sAll('im'),tCl=sAll('cl'),tRs=sAll('r');
+  // Split results: Conv. Started (messaging) vs Profile Visits (IG profile visits) — tracked independently per venue
+  const sPV=(vid)=>WK.filter(w=>SEL.includes(w.id)).reduce((a,w)=>a+(w.v[vid]?.pv||0)+(vid==='gym'?(w.v[vid]?.r||0):0),0);
+  const tConv=V.filter(v=>v.id!=='gym'&&v.id!=='hr').reduce((a,v)=>a+aggW(SEL,v.id,'r'),0);
+  const tProf=V.reduce((a,v)=>a+sPV(v.id),0);
+  const tHR=aggW(SEL,'hr','cl');
+  const mS=Math.max(...V.map(v=>sD(v.id,'sp')),1),mR=Math.max(...V.map(v=>sD(v.id,'re')),1);
+  const sBars=V.map(v=>{const s=sD(v.id,'sp');return`<div class="brow"><div class="blbl">${v.name}</div><div class="btrack"><div class="bfill" style="width:${((s/mS)*100).toFixed(1)}%;background:${v.c}28;border-right:${s?3:1}px solid ${v.c}${s?'':'44'};"></div></div><div class="bnum" style="color:${s?v.c:'var(--t3)'};">${s?f$(s,0):'$0'}</div></div>`;}).join('');
+  const rBars=V.map(v=>{const r=sD(v.id,'re');return`<div class="brow"><div class="blbl">${v.name}</div><div class="btrack"><div class="bfill" style="width:${((r/mR)*100).toFixed(1)}%;background:${v.c}28;border-right:${r?3:1}px solid ${v.c}${r?'':'44'};"></div></div><div class="bnum" style="color:${r?v.c:'var(--t3)'};">${r?fK(r):'0'}</div></div>`;}).join('');
+  const trows=V.flatMap(v=>{
+    const s=sD(v.id,'sp'),r=sD(v.id,'re'),i=sD(v.id,'im'),cl=sD(v.id,'cl'),rs=sD(v.id,'r');
+    const pv=v.id==='gym'?rs:sPV(v.id);
+    const ads=getAds(SEL,v.id),isO=!!EXP[v.id];
+    const main=`<tr><td><span class="vc"><span class="vdot" style="background:${v.c};"></span>${v.name}</span></td><td>${s?f2(s):'$0'}</td><td>${r?fK(r):'0'}</td><td>${i?fN(i):'0'}</td><td>${cl?fN(cl):'0'}</td><td>${!['gym','hr'].includes(v.id)&&rs?fN(rs):'0'}</td><td>${pv?fN(pv):'0'}</td>
+      <td>${v.id==='hr'&&cl?fN(cl):'0'}</td>
+      <td style="text-align:center;padding:6px;">${ads.length?`<span class="tog${isO?' open':''}" onclick="togE('${v.id}',event)">${isO?'▲':'▼'}</span>`:'<span class="tna">—</span>'}</td></tr>`;
+    if(!isO||!ads.length)return[main];
+    const aR=ads.map(a=>`<tr class="ads-row"><td>${a.n}</td><td>${a.sp?f2(a.sp):'—'}</td><td>${a.re?fK(a.re):'—'}</td><td>${a.im?fN(a.im):'—'}</td><td>${a.cl?fN(a.cl):'—'}</td><td>${a.r?fN(a.r):(a.pv?fN(a.pv)+' <span style="color:var(--t3);font-size:10px;">(visits)</span>':'—')}</td><td style="text-align:left;white-space:normal;padding:7px 10px;">${a.note||''}</td></tr>`).join('');
+    return[main,aR];
+  }).join('');
+  return`<div>
+    <div class="kg" style="grid-template-columns:repeat(7,1fr);">
+      <div class="kc"><div class="kl">Amount Spent</div><div class="kv">${tS?f$(tS,0):'—'}</div><div class="ks">${sLbl()}</div></div>
+      <div class="kc"><div class="kl">Reach</div><div class="kv ${!tR?'na':''}">${tR?fK(tR):'—'}</div><div class="ks">Unique accounts</div></div>
+      <div class="kc"><div class="kl">Impressions</div><div class="kv ${!tI?'na':''}">${tI?fK(tI):'—'}</div><div class="ks">Total ad views</div></div>
+      <div class="kc"><div class="kl">Link Clicks</div><div class="kv ${!tCl?'na':''}">${tCl?fN(tCl):'—'}</div><div class="ks">All venues</div></div>
+      <div class="kc"><div class="kl">Conv. Started</div><div class="kv ${!tConv?'na':''}">${tConv?fN(tConv):'—'}</div><div class="ks">Messaging conversations</div></div>
+      <div class="kc"><div class="kl">Profile Visits</div><div class="kv ${!tProf?'na':''}">${tProf?fN(tProf):'—'}</div><div class="ks">Instagram profile visits</div></div>
+      <div class="kc"><div class="kl">HR Link Clicks</div><div class="kv ${!tHR?'na':''}">${tHR?fN(tHR):'—'}</div><div class="ks">Recruitment clicks</div></div>
+    </div>
+    <div class="g2">
+      <div class="panel"><div class="pttl">Amount Spent — by Venue</div><div class="bars">${sBars}</div></div>
+      <div class="panel"><div class="pttl">Reach — by Venue</div><div class="bars">${rBars}</div></div>
+    </div>
+    <div class="sec"><h2>All Venues — Performance Table</h2><span class="secn">▼ expand ad-set breakdown &amp; analysis</span></div>
+    <div class="panel" style="padding:0;overflow:hidden;margin-bottom:18px;">
+      <table class="dt">
+        <thead><tr><th style="text-align:left;min-width:130px;">Venue</th><th>Spent</th><th>Reach</th><th>Impressions</th><th>Link Clicks</th><th>Conv. Started</th><th>Profile Visits</th><th>HR Clicks</th><th class="thc"></th></tr></thead>
+        <tbody>${trows}</tbody>
+        <tfoot><tr><td>TOTALS</td><td>${tS?f2(tS):'—'}</td><td>${tR?fK(tR):'—'}</td><td>${tI?fK(tI):'—'}</td><td>${tCl?fN(tCl):'—'}</td><td>${tConv?fN(tConv):'—'}</td><td>${tProf?fN(tProf):'—'}</td><td>${tHR?fN(tHR):'—'}</td><td></td></tr></tfoot>
+      </table>
+    </div>
+    <div class="footer"><span>Period: ${sLbl()}</span><span>⚡ Addmind Beirut — Meta Ads</span></div>
+  </div>`;
+}
+
+// MONTHLY SPEND
+function renderSpend(){
+  const pt={};MS_VENUES.forEach(v=>{MNO.forEach(mk=>{if(!pt[mk])pt[mk]=0;pt[mk]+=(MS[v.id]?.months?.[mk]?.t||0);});});
+  const kpi=MNO.filter(mk=>pt[mk]>0).map(mk=>`<div class="kc"><div class="kl">Total — ${MNL[mk]}</div><div class="kv">$${Math.round(pt[mk]).toLocaleString()}</div><div class="ks">All active venues</div></div>`).join('');
+  const blocks=MNO.filter(mk=>pt[mk]>0).map(mk=>{
+    const maxV=Math.max(...MS_VENUES.map(v=>MS[v.id]?.months?.[mk]?.t||0),1);
+    const vrows=MS_VENUES.map(v=>{
+      const md=MS[v.id]?.months?.[mk];if(!md||!md.t)return'';
+      const key=`${v.id}_${mk}`,isO=!!SEX[key];
+      const wrows=isO&&md.w?.length?`<div class="swr-wrap">${md.w.map(w=>`<div class="swr"><div class="swr-lbl">${w.l}</div><div class="swr-acts">${w.a}</div><div class="swr-amt">$${Number(w.s).toFixed(0)}</div></div>`).join('')}</div>`:'';
+      return`<div><div class="svr"><span class="svr-dot" style="background:${v.c};"></span><span class="svr-name">${v.name}</span><div class="svr-bwrap"><div class="svr-bar" style="width:${((md.t/maxV)*100).toFixed(1)}%;background:${v.c}cc;"></div></div><span class="svr-amt">$${Math.round(md.t).toLocaleString()}</span><span class="svr-tog"><button class="${isO?'open':''}" onclick="togSX('${key}',event)">${isO?'▲':'▼'}</button></span></div>${wrows}</div>`;
+    }).join('');
+    return`<div class="spend-month-block"><div class="spend-month-hd"><span class="spend-month-name">${MNL[mk]}</span><span class="spend-month-total">$${Math.round(pt[mk]).toLocaleString()}</span></div>${vrows}</div>`;
+  }).join('');
+  return`<div><div class="kg" style="grid-template-columns:repeat(${MNO.filter(mk=>pt[mk]>0).length},1fr);">${kpi}</div>${blocks}<div class="footer"><span>Source: Overall Spent sheet + Meta weekly exports. Jun 2026 = full month (01–30 Jun). Jul 2026 = full month (01–31 Jul). Click ▼ to expand weekly breakdown.</span><span>⚡ Addmind Beirut</span></div></div>`;
+}
+
+// MOM
+function renderMoM(){
+  const tt={};MNO.forEach(mk=>{tt[mk]=MS_VENUES.reduce((a,v)=>a+(MS[v.id]?.months?.[mk]?.t||0),0);});
+  const dFJ=pct(tt.feb,tt.jan),dMF=pct(tt.mar,tt.feb),dAMom=pct(tt.apr,tt.mar),dMApr=pct(tt.may,tt.apr),dJM=pct(tt.jun,tt.may),dJlJ=pct(tt.jul,tt.jun),dAJl=pct(tt.aug,tt.jul),dSA=pct(tt.sep,tt.aug),dOS=pct(tt.oct,tt.sep);
+  const rows=V.flatMap(v=>{
+    const jan=MS[v.id]?.months?.jan?.t||0,feb=MS[v.id]?.months?.feb?.t||0,mar=MS[v.id]?.months?.mar?.t||0,apr=MS[v.id]?.months?.apr?.t||0,may=MS[v.id]?.months?.may?.t||0,jun=MS[v.id]?.months?.jun?.t||0,jul=MS[v.id]?.months?.jul?.t||0,aug=MS[v.id]?.months?.aug?.t||0,sep=MS[v.id]?.months?.sep?.t||0,oct=MS[v.id]?.months?.oct?.t||0;
+    if(!jan&&!feb&&!mar&&!apr&&!may&&!jun&&!jul&&!aug&&!sep&&!oct)return[];
+    const dFJ2=pct(feb,jan),dMF2=pct(mar,feb),dAM=pct(apr,mar),dMA=pct(may,apr),dJM2=pct(jun,may),dJlJ2=pct(jul,jun),dAJl2=pct(aug,jul),dSA2=pct(sep,aug),dOS2=pct(oct,sep),isO=!!EXP[v.id];
+    const am={};WK.filter(w=>w.mk==='oct').forEach(w=>{(w.v[v.id]?.ads||[]).forEach(a=>{if(!am[a.n])am[a.n]={sp:0};am[a.n].sp+=a.sp||0;});});
+    const ads=Object.entries(am);
+    const main=`<tr><td><span class="vc"><span class="vdot" style="background:${v.c};"></span>${v.name}</span></td><td>${jan?'$'+Math.round(jan).toLocaleString():'—'}</td><td>${feb?'$'+Math.round(feb).toLocaleString():'—'}</td>${tdD(dFJ2,true)}<td>${mar?'$'+Math.round(mar).toLocaleString():'—'}</td>${tdD(dMF2,true)}<td>${apr?'$'+Math.round(apr).toLocaleString():'—'}</td>${tdD(dAM,true)}<td>${may?'$'+Math.round(may).toLocaleString():'—'}</td>${tdD(dMA,true)}<td>${jun?'$'+Math.round(jun).toLocaleString():'—'}</td>${tdD(dJM2,true)}<td>${jul?'$'+Math.round(jul).toLocaleString():'—'}</td>${tdD(dJlJ2,true)}<td>${aug?'$'+Math.round(aug).toLocaleString():'—'}</td>${tdD(dAJl2,true)}<td>${sep?'$'+Math.round(sep).toLocaleString():'—'}</td>${tdD(dSA2,true)}<td>${oct?'$'+Math.round(oct).toLocaleString():'—'}</td>${tdD(dOS2,true)}<td style="text-align:center;padding:6px;">${ads.length?`<span class="tog${isO?' open':''}" onclick="togE('${v.id}',event)">${isO?'▲':'▼'}</span>`:'<span class="tna">—</span>'}</td></tr>`;
+    if(!isO||!ads.length)return[main];
+    const aR=ads.map(([n,d])=>`<tr class="ads-row"><td>${n}</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td class="tna">—</td><td>${d.sp?'$'+Math.round(d.sp):'—'} <span class="tna" style="font-size:9.5px;">Oct</span></td><td class="tna">—</td><td></td></tr>`).join('');
+    return[main,aR];
+  }).join('');
+  return`<div>
+    <div class="momgrid">
+      <div class="momcell"><div class="momlbl">January → February</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Jan 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${Math.round(tt.jan).toLocaleString()}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Feb 2026</div><div class="momval">$${Math.round(tt.feb).toLocaleString()}</div>${mchip(dFJ,true)}</div>
+      <div class="momcell"><div class="momlbl">February → March</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Feb 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${Math.round(tt.feb).toLocaleString()}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Mar 2026</div><div class="momval">$${Math.round(tt.mar).toLocaleString()}</div>${mchip(dMF,true)}</div>
+      <div class="momcell"><div class="momlbl">March → April</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Mar 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${Math.round(tt.mar).toLocaleString()}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Apr 2026</div><div class="momval">$${tt.apr?Math.round(tt.apr).toLocaleString():'—'}</div>${mchip(dAMom,true)}</div>
+      <div class="momcell"><div class="momlbl">April → May</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Apr 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${tt.apr?Math.round(tt.apr).toLocaleString():'—'}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">May 2026</div><div class="momval">$${tt.may?Math.round(tt.may).toLocaleString():'—'}</div>${mchip(dMApr,true)}</div>
+      <div class="momcell"><div class="momlbl">May → June</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">May 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${tt.may?Math.round(tt.may).toLocaleString():'—'}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Jun 2026</div><div class="momval">$${tt.jun?Math.round(tt.jun).toLocaleString():'—'}</div>${mchip(dJM,true)}</div>
+      <div class="momcell"><div class="momlbl">June → July</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Jun 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${tt.jun?Math.round(tt.jun).toLocaleString():'—'}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Jul 2026</div><div class="momval">$${tt.jul?Math.round(tt.jul).toLocaleString():'—'}</div>${mchip(dJlJ,true)}</div>
+      <div class="momcell"><div class="momlbl">July → August</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Jul 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${tt.jul?Math.round(tt.jul).toLocaleString():'—'}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Aug 2026</div><div class="momval">$${tt.aug?Math.round(tt.aug).toLocaleString():'—'}</div>${mchip(dAJl,true)}</div>
+      <div class="momcell"><div class="momlbl">August → September</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Aug 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${tt.aug?Math.round(tt.aug).toLocaleString():'—'}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Sep 2026</div><div class="momval">$${tt.sep?Math.round(tt.sep).toLocaleString():'—'}</div>${mchip(dSA,true)}</div>
+      <div class="momcell"><div class="momlbl">September → October</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Sep 2026</div><div style="font-size:18px;font-weight:600;color:var(--t3);margin-bottom:8px;">$${tt.sep?Math.round(tt.sep).toLocaleString():'—'}</div><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">Oct 2026 (partial)</div><div class="momval">$${tt.oct?Math.round(tt.oct).toLocaleString():'—'}</div>${mchip(dOS,true)}</div>
+    </div>
+    <div class="sec"><h2>Month-over-Month — Spend per Venue</h2><span class="secn">▼ expand Oct ad-set breakdown</span></div>
+    <div class="panel" style="padding:0;overflow:hidden;margin-bottom:18px;">
+      <table class="dt">
+        <thead><tr><th style="text-align:left;min-width:110px;">Venue</th><th>Jan</th><th>Feb</th><th>Jan→Feb</th><th>Mar</th><th>Feb→Mar</th><th>Apr</th><th>Mar→Apr</th><th>May</th><th>Apr→May</th><th>Jun</th><th>May→Jun</th><th>Jul</th><th>Jun→Jul</th><th>Aug</th><th>Jul→Aug</th><th>Sep</th><th>Aug→Sep</th><th>Oct ⚡</th><th>Sep→Oct</th><th class="thc"></th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr><td>PORTFOLIO</td><td>$${Math.round(tt.jan).toLocaleString()}</td><td>$${Math.round(tt.feb).toLocaleString()}</td><td><span class="${dFJ<0?'tup':'tdn'}">${dFJ>0?'▲':'▼'} ${Math.abs(dFJ).toFixed(1)}%</span></td><td>$${Math.round(tt.mar).toLocaleString()}</td><td><span class="${dMF<0?'tup':'tdn'}">${dMF>0?'▲':'▼'} ${Math.abs(dMF).toFixed(1)}%</span></td><td>$${tt.apr?Math.round(tt.apr).toLocaleString():'—'}</td><td>${tt.apr?`<span class="${dAMom<0?'tup':'tdn'}">${dAMom>0?'▲':'▼'} ${Math.abs(dAMom).toFixed(1)}%</span>`:'—'}</td><td>$${tt.may?Math.round(tt.may).toLocaleString():'—'}</td><td>${tt.may?`<span class="${dMApr<0?'tup':'tdn'}">${dMApr>0?'▲':'▼'} ${Math.abs(dMApr).toFixed(1)}%</span>`:'—'}</td><td>$${tt.jun?Math.round(tt.jun).toLocaleString():'—'}</td><td>${tt.jun?`<span class="${dJM<0?'tup':'tdn'}">${dJM>0?'▲':'▼'} ${Math.abs(dJM).toFixed(1)}%</span>`:'—'}</td><td>$${tt.jul?Math.round(tt.jul).toLocaleString():'—'}</td><td>${tt.jul?`<span class="${dJlJ<0?'tup':'tdn'}">${dJlJ>0?'▲':'▼'} ${Math.abs(dJlJ).toFixed(1)}%</span>`:'—'}</td><td>$${tt.aug?Math.round(tt.aug).toLocaleString():'—'}</td><td>${tt.aug?`<span class="${dAJl<0?'tup':'tdn'}">${dAJl>0?'▲':'▼'} ${Math.abs(dAJl).toFixed(1)}%</span>`:'—'}</td><td>$${tt.sep?Math.round(tt.sep).toLocaleString():'—'}</td><td>${tt.sep&&tt.aug?`<span class="${dSA<0?'tup':'tdn'}">${dSA>0?'▲':'▼'} ${Math.abs(dSA).toFixed(1)}%</span>`:'—'}</td><td></td></tr></tfoot>
+      </table>
+    </div>
+    <div class="footer"><span>Aug 2026 = full month (01–30 Aug). Sep 2026 = week 1 only (01–06 Sep) — partial, not comparable to full months.</span><span>⚡ Addmind Beirut — MoM</span></div>
+  </div>`;
+}
+
+// ALL WEEKS
+function renderHist(){
+  const mx=[{k:'sp',l:'Spent ($)',f:v=>v?f$(v,0):'—'},{k:'re',l:'Reach',f:v=>v?fK(v):'—'},{k:'im',l:'Impressions',f:v=>v?fK(v):'—'},{k:'cl',l:'Link Clicks',f:v=>v?fN(v):'—'},{k:'r',l:'Results',f:v=>v?fN(v):'—'}];
+  const tR=mx.map(m=>{const c=WK.map(w=>`<td style="font-weight:600;">${m.f(V.reduce((a,v)=>a+(w.v[v.id]?.[m.k]||0),0))}</td>`).join('');return`<tr><td style="color:var(--t2);">${m.l}</td>${c}</tr>`;}).join('');
+  const vS=V.map(v=>{const rows=mx.map(m=>{const c=WK.map(w=>`<td>${m.f(w.v[v.id]?.[m.k]||0)}</td>`).join('');return`<tr><td style="color:var(--t2);font-size:12px;">${m.l}</td>${c}</tr>`;}).join('');return`<div style="margin-bottom:18px;"><div style="display:flex;align-items:center;gap:8px;padding:8px 0 7px;"><span class="vdot" style="background:${v.c};width:9px;height:9px;flex-shrink:0;"></span><span style="font-size:13.5px;font-weight:600;">${v.name}</span></div><table class="dt" style="font-size:12.5px;"><thead><tr><th style="text-align:left;width:115px;">Metric</th>${WK.map(w=>`<th>${w.label}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;}).join('');
+  return`<div><div class="infobox"><strong>All Weeks Archive.</strong> Every uploaded week is stored here. Use the 📅 calendar to select any combination of weeks or full months for aggregated views.</div><div class="sec"><h2>Portfolio Totals</h2></div><div class="panel" style="padding:0;overflow:hidden;margin-bottom:18px;"><table class="dt" style="font-size:12.5px;"><thead><tr><th style="text-align:left;width:115px;">Metric</th>${WK.map(w=>`<th>${w.label}</th>`).join('')}</tr></thead><tbody>${tR}</tbody></table></div><div class="sec"><h2>Per Venue</h2></div>${vS}<div class="footer"><span>⚡ Addmind Beirut — Weekly Archive</span></div></div>`;
+}
+
+// SINGLE VENUE
+function renderVenue(id){
+  const v=V.find(x=>x.id===id),vd=MS[id];
+  const init=v.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const s=sD(id,'sp'),r=sD(id,'re'),i=sD(id,'im'),cl=sD(id,'cl'),rBase=sD(id,'r'),pvBase=sD(id,'pv');
+  const rs=rBase||pvBase;
+  const rt=WK.find(x=>x.id===SEL[0])?.v[id]?.rt||'—';
+  const ads=getAds(SEL,id),hasD=s>0||r>0;
+  const fd=[{n:'Reach',val:r,a:'dd'},{n:'Impressions',val:i,a:'bb'},{n:'Link Clicks',val:cl,a:'88'},{n:'Results',val:rs,a:'55'}];
+  const fmax=Math.max(...fd.map(f=>f.val),1);
+  const funnel=fd.map(f=>`<div class="fnrow"><div class="fnlbl">${f.n}</div><div class="fnbar" style="width:${f.val?Math.max((f.val/fmax*100),5).toFixed(0):2}%;background:${f.val?v.c+f.a:'var(--border)'};"></div><div class="fnval" style="color:${f.val?'inherit':'var(--t3)'};">${f.val?fK(f.val):'0'}</div></div>`).join('');
+  // Show only months matching selected period — strictly no bleed from other months
+  const selMKs=SEL_M?[SEL_M]:[...new Set(SEL.map(wid=>{const w=WK.find(x=>x.id===wid);return w?.mk||null;}).filter(Boolean))];
+  const mV=selMKs.map(mk=>({mk,l:{jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec'}[mk],val:vd?.months?.[mk]?.t||0}));
+  const mMax=Math.max(...mV.map(x=>x.val),1);
+  const pttlSpend=mV.length===1?`${mV[0].l} 2026 Spend`:`Spend — ${sLbl()}`;
+  const mBars=mV.map(({l,val})=>{const h=val?Math.max((val/mMax*86),4).toFixed(0):4;return`<div class="mcol"><div class="mval" style="color:${val?v.c:'var(--t3)'};">${val?'$'+Math.round(val).toLocaleString():'$0'}</div><div class="mbar" style="height:${h}px;background:${val?v.c+'cc':'var(--border)'};"></div><div class="mlbl">${l} 2026</div></div>`;}).join('');
+  // Weekly history: only show selected weeks
+  const selWKs=WK.filter(w=>SEL.includes(w.id));
+  const hR=[['Spent','sp',v=>v?f$(v,0):'$0'],['Reach','re',v=>v?fK(v):'0'],['Impressions','im',v=>v?fK(v):'0'],['Link Clicks','cl',v=>v?fN(v):'0'],['Results','r',v=>v?fN(v):'0']].map(([l,k,f])=>`<tr><td style="color:var(--t2);">${l}</td>${selWKs.map(w=>`<td>${f(k==='r'?((w.v[id]?.r)||(w.v[id]?.pv)||0):(w.v[id]?.[k]||0))}</td>`).join('')}</tr>`).join('');
+  const adSec=ads.length?`<div class="sec"><h2>Ad-Set Breakdown &amp; Analysis</h2><span class="secn">${sLbl()}</span></div>
+    <div class="panel" style="padding:0;overflow:hidden;margin-bottom:18px;"><table class="dt"><thead><tr><th style="text-align:left;">Ad Set</th><th>Spent</th><th>Reach</th><th>Impressions</th><th>Link Clicks</th><th>Results</th><th class="tha">Analysis</th></tr></thead>
+    <tbody>${ads.map(a=>`<tr><td style="color:var(--t2);">${a.n}</td><td>${a.sp?f2(a.sp):'—'}</td><td>${a.re?fK(a.re):'—'}</td><td>${a.im?fN(a.im):'—'}</td><td>${a.cl?fN(a.cl):'—'}</td><td>${a.r?fN(a.r)+(rt==='Calls'?' <span style="color:var(--t3);font-size:10px;">(calls)</span>':''):(a.pv?fN(a.pv)+' <span style="color:var(--t3);font-size:10px;">(visits)</span>':'—')}</td><td style="text-align:left;white-space:normal;padding:8px 10px;">${a.note||''}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>TOTAL</td><td>${f2(s)}</td><td>${fK(r)}</td><td>${fN(i)}</td><td>${fN(cl)}</td><td>${fN(rs)}</td><td></td></tr></tfoot></table></div>`:'';
+  // AD QUALITY (Meta quality ranking per ad, with its ad set / activation)
+  const qHas=WK.some(w=>(w.v[id]?.qa||[]).length);
+  const qRows=[];selWKs.forEach(w=>{(w.v[id]?.qa||[]).forEach(x=>qRows.push({...x,wl:w.label}));});
+  const qMulti=new Set(qRows.map(x=>x.wl)).size>1;
+  const qFmt=q=>{if(!q||q==='-')return'<span style="color:var(--t3);">—</span>';const p=q.split(' – ');return`<span class="qtag">${p[0]}</span>${p[1]?`<span class="qsub">${p[1]}</span>`:''}`;};
+  const qGroupRows=()=>{let o='',lastW=null,lastS=null;qRows.forEach(x=>{
+    if(qMulti&&x.wl!==lastW){o+=`<tr class="qwk"><td colspan="4">${x.wl}</td></tr>`;lastW=x.wl;lastS=null;}
+    if(x.s!==lastS){o+=`<tr class="qas"><td colspan="4">${x.s}</td></tr>`;lastS=x.s;}
+    o+=`<tr><td style="text-align:left;padding-left:22px;">${x.n}</td><td style="text-align:left;">${qFmt(x.q)}</td><td>${x.im?fN(x.im):'—'}</td><td>${x.r?fN(x.r):'—'}</td></tr>`;});return o;};
+  const qSec=qHas?`<div class="sec"><h2>Ad Quality</h2><span class="secn">${sLbl()}</span></div>
+    <div class="panel" style="padding:0;overflow:hidden;margin-bottom:18px;">${qRows.length?`<table class="dt"><thead><tr><th style="text-align:left;">Ad</th><th style="text-align:left;">Quality Ranking</th><th>Impressions</th><th>Results</th></tr></thead>
+    <tbody>${qGroupRows()}</tbody></table>
+    <div class="qleg"><div class="qlh">How to read the ranking</div>
+      <div class="qlr"><b>Above Average</b><span>Scored in the top 45% of ads.</span></div>
+      <div class="qlr"><b>Average</b><span>Scored between the 35th and 55th percentile.</span></div>
+      <div class="qlr"><b>Below Average (Bottom 35% of ads)</b><span>Performing worse than the majority of competing ads.</span></div>
+      <div class="qlr"><b>Below Average (Bottom 20% of ads)</b><span>Significant negative user feedback or low-quality attributes detected.</span></div>
+      <div class="qlr"><b>Below Average (Bottom 10% of ads)</b><span>Severe creative or post-click issues causing high user dissatisfaction.</span></div>
+      <div class="qlh" style="margin-top:14px;">Why some ads show “—”</div>
+      <div class="qlp">Quality ranking compares each ad with other ads competing for the same audience, using Meta's own data. Meta only shows a ranking once an ad has gathered enough delivery in the selected period (a minimum of 500 impressions) and has enough comparable ads to be measured against. Ads with low delivery, or whose audience has too few comparable ads, are left unranked. Meta does not publish the exact reason for each ad, so “—” means no ranking was provided, not that the ad performed badly.</div>
+    </div></div>`:'<div class="qnote" style="border-top:none;">No quality ranking data available for this period.</div>'}</div>`:'';
+  // DEMOGRAPHICS (age & gender, from Meta breakdowns)
+  const dHas=WK.some(w=>w.v[id]?.dm);
+  const dWks=selWKs.filter(w=>w.v[id]?.dm);
+  const dK=n=>n>=1000?(n/1000).toPrecision(3)+'K':String(n);
+  const dPanel=(title,rows,col)=>{const tI=rows.reduce((a,x)=>a+x.im,0),tR=rows.reduce((a,x)=>a+x.re,0),mx=Math.max(...rows.map(x=>x.im),1);
+    return`<div class="panel" style="padding:16px 18px;"><div class="pttl">${title}</div>
+    <div class="dmh"><span></span><span>Impressions</span><span>Share</span><span>Reach</span></div>
+    ${rows.map(x=>`<div class="dmr"><div class="dml">${x.g}</div><div class="dmb"><i style="width:${Math.max(x.im/mx*100,1.5).toFixed(1)}%;background:${col};"></i><b>${dK(x.im)}</b></div><div class="dms">${(x.im/tI*100).toFixed(1)}%</div><div class="dmv">${dK(x.re)}</div></div>`).join('')}</div>`;};
+  const dBlock=w=>{const d=w.v[id].dm;const top=(rows)=>rows.reduce((a,x)=>x.im>a.im?x:a,rows[0]);const tI=d.gen.reduce((a,x)=>a+x.im,0),g=top(d.gen),ag=top(d.age),aI=d.age.reduce((a,x)=>a+x.im,0);
+    return`${dWks.length>1?`<div class="sec"><h2>${w.label}</h2></div>`:''}<div class="dmsum"><b>${g.g}</b> accounts for ${(g.im/tI*100).toFixed(0)}% of impressions · <b>${ag.g}</b> is the largest age group (${(ag.im/aI*100).toFixed(0)}% of impressions)</div>
+    <div class="g2">${dPanel('Age',d.age,v.c+'cc')}${dPanel('Gender',d.gen,v.c+'99')}</div>`;};
+  const dSec=dHas?`<div class="sec"><h2>Audience Demographics</h2><span class="secn">${sLbl()}</span></div>${dWks.length?dWks.map(dBlock).join(''):'<div class="panel"><div class="qnote" style="border-top:none;">No demographic data available for this period.</div></div>'}
+    <div class="qnote" style="border:1px solid var(--border);border-radius:8px;margin-bottom:18px;">Source: Meta Ads Manager age and gender breakdowns, rounded as reported by Meta. Reach counts each person once across all ad sets, so it is lower than the sum of ad-set reach on the Performance page.</div>`:'';
+  // ACCOUNT INSIGHTS (Meta Business Suite account-level numbers)
+  const aHas=WK.some(w=>w.v[id]?.ai);
+  const aWks=selWKs.filter(w=>w.v[id]?.ai);
+  const aBlock=w=>{const x=w.v[id].ai;const c=(l,v,sub)=>`<div class="kc"><div class="kl">${l}</div><div class="kv">${v}</div><div class="ks">${sub}</div></div>`;
+    return`${aWks.length>1?`<div class="sec"><h2>${w.label}</h2></div>`:''}<div class="kg" style="grid-template-columns:repeat(4,1fr);">${c('Views',x.views,`Instagram ${x.ig} · Facebook ${x.fb}`)}${c('Content Interactions',x.ci,'Total interactions')}${c('Instagram Profile Visits',x.pv,'Profile visits')}${c('Instagram Follows',x.fo,'New follows')}</div>`;};
+  const aSec=aHas?`<div class="sec"><h2>Account Insights</h2><span class="secn">${sLbl()}</span></div>${aWks.length?aWks.map(aBlock).join(''):'<div class="panel"><div class="qnote" style="border-top:none;">No account insights available for this period.</div></div>'}`:'';
+  if(QSIDE&&AV)return`<div>
+    <div class="bhd"><div class="bicon" style="background:${v.c};">${init}</div><div class="bname">${v.name} — Account Insights</div><span class="bpill">📅 ${sLbl()}</span></div>
+    ${aSec||'<div class="nodata">No account insights available.</div>'}
+    <div class="footer"><span>Period: ${sLbl()}</span><span>⚡ Addmind Beirut · ${v.name}</span></div>
+  </div>`;
+  if(QSIDE&&DV)return`<div>
+    <div class="bhd"><div class="bicon" style="background:${v.c};">${init}</div><div class="bname">${v.name} — Demographics</div><span class="bpill">📅 ${sLbl()}</span></div>
+    ${dSec||'<div class="nodata">No demographic data available.</div>'}
+    <div class="footer"><span>Period: ${sLbl()}</span><span>⚡ Addmind Beirut · ${v.name}</span></div>
+  </div>`;
+  if(QSIDE&&QV)return`<div>
+    <div class="bhd"><div class="bicon" style="background:${v.c};">${init}</div><div class="bname">${v.name} — Ads Quality</div><span class="bpill">📅 ${sLbl()}</span></div>
+    ${qSec||'<div class="nodata">No quality ranking data available.</div>'}
+    <div class="footer"><span>Period: ${sLbl()}</span><span>⚡ Addmind Beirut · ${v.name}</span></div>
+  </div>`;
+  return`<div>
+    <div class="bhd"><div class="bicon" style="background:${v.c};">${init}</div><div class="bname">${v.name}</div><span class="bpill">📅 ${sLbl()}</span>${!hasD?'<span class="ndpill">No active ads this period</span>':''}</div>
+    <div class="kg" style="grid-template-columns:repeat(5,1fr);">
+      <div class="kc"><div class="kl">Amount Spent</div><div class="kv ${!s?'na':''}">${s?f2(s):'$0'}</div><div class="ks">Period total</div></div>
+      <div class="kc"><div class="kl">Reach</div><div class="kv ${!r?'na':''}">${r?fK(r):'0'}</div><div class="ks">Unique accounts</div></div>
+      <div class="kc"><div class="kl">Impressions</div><div class="kv ${!i?'na':''}">${i?fN(i):'0'}</div><div class="ks">Total ad views</div></div>
+      <div class="kc"><div class="kl">Link Clicks</div><div class="kv ${!cl?'na':''}">${cl?fN(cl):'0'}</div><div class="ks">All ad sets</div></div>
+      <div class="kc"><div class="kl">Results</div><div class="kv ${!rs?'na':''}">${rs?fN(rs):'0'}</div><div class="ks">${rt}</div></div>
+    </div>
+    <div class="g2"><div class="panel"><div class="pttl">Audience Funnel</div><div class="funnel">${funnel}</div></div><div class="panel"><div class="pttl">${pttlSpend}</div><div class="mwrap" style="height:${mV.length===1?'80px':'100px'}">${mBars}</div></div></div>
+    ${adSec}
+    ${QSIDE?'':qSec}
+    ${QSIDE?'':dSec}
+    ${QSIDE?'':aSec}
+    ${selWKs.length>1?`<div class="sec"><h2>Weekly Breakdown</h2></div><div class="panel" style="padding:0;overflow:hidden;margin-bottom:18px;"><table class="dt" style="font-size:12.5px;"><thead><tr><th style="text-align:left;width:115px;">Metric</th>${selWKs.map(w=>`<th>${w.label}</th>`).join('')}</tr></thead><tbody>${hR}</tbody></table></div>`:''}
+    <div class="footer"><span>Period: ${sLbl()}</span><span>⚡ Addmind Beirut · ${v.name}</span></div>
+  </div>`;
+}
+
+function render(){
+  let h='';
+  if(VIEW==='all'){if(TAB==='perf')h=renderPerf();else if(TAB==='spend')h=renderSpend();else if(TAB==='mom')h=renderMoM();else h=renderHist();}
+  else h=renderVenue(VIEW);
+  document.getElementById('cnt').innerHTML=h;
+}
+buildCal();render();
+</script>
+</body>
+</html>
